@@ -1,0 +1,39 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 28, 2017, 4:48:32 PM
+    Author     : diSelmi
+*/
+
+#newFonctionInput {
+    display: none;
+}
+
+.profile_picture_admin {
+    display: inline-block;
+    margin: 0 10px 10px 0;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile_picture_admin img {
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.profile_title_admin {
+    display: inline-block;
+    vertical-align: bottom;
+}
+

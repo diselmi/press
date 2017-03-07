@@ -2,103 +2,248 @@
 
 namespace app\models;
 
-class User extends \yii\base\Object implements \yii\web\IdentityInterface
+use Yii;
+use yii\web\UploadedFile;
+
+/**
+ * This is the model class for table "user".
+ *
+ * @property integer $id
+ * @property string $nom
+ * @property string $prenom
+ * @property string $mail
+ * @property string $login
+ * @property string $pass
+ * @property integer $lang
+ * @property string $photo
+ * @property integer $role
+ * @property integer $fonction
+ * @property string $logo
+ * @property string $adresse
+ * @property string $domaines
+ * @property string $couleur_interface
+ *
+ * @property Abonnement[] $abonnements
+ * @property Abonnement[] $abonnements0
+ * @property Document[] $documents
+ * @property Facture[] $factures
+ * @property Message[] $messages
+ * @property Message[] $messages0
+ * @property Nouveaute[] $nouveautes
+ * @property Privilege[] $privileges
+ * @property Salle[] $salles
+ * @property Service[] $services
+ * @property Langue $lang0
+ * @property Role $role0
+ * @property Fonction $fonction0
+ */
+class User extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
-
+    
+    /**
+     * @var UploadedFile
+     */
+    public $imagePhoto;
+    /**
+     * @var UploadedFile
+     */
+    public $imageLogo;
+    
+    
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'user';
     }
 
     /**
      * @inheritdoc
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function rules()
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
+        return [
+            [['nom', 'mail', 'role'], 'required'],
+            [['role', 'lang', 'fonction'], 'integer'],
+            [['nom', 'prenom', 'mail', 'login', 'pass'], 'string', 'max' => 32],
+            [['adresse'], 'string', 'max' => 64],
+            [['domaines'], 'string', 'max' => 64],
+            [['mail'], 'unique'],
+            [['couleur_interface'], 'string', 'min' => 7, 'max' => 7],
+            [['imagePhoto'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            [['imageLogo'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'nom' => Yii::t('app', 'Nom'),
+            'prenom' => Yii::t('app', 'Prenom'),
+            'mail' => Yii::t('app', 'Mail'),
+            'login' => Yii::t('app', 'Login'),
+            'pass' => Yii::t('app', 'Pass'),
+            'lang' => Yii::t('app', 'Lang'),
+            'photo' => Yii::t('app', 'Photo'),
+            'role' => Yii::t('app', 'Role'),
+            'fonction' => Yii::t('app', 'Fonction'),
+            'logo' => Yii::t('app', 'Logo'),
+            'adresse' => Yii::t('app', 'Adresse'),
+            'domaines' => Yii::t('app', 'Domaines'),
+            'couleur_interface' => Yii::t('app', 'Couleur Interface'),
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbonnements()
+    {
+        return $this->hasMany(Abonnement::className(), ['client' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAbonnements0()
+    {
+        return $this->hasMany(Abonnement::className(), ['vis_a_vis' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDocuments()
+    {
+        return $this->hasMany(Document::className(), ['ajoute_par' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFactures()
+    {
+        return $this->hasMany(Facture::className(), ['client' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessages()
+    {
+        return $this->hasMany(Message::className(), ['expediteur' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessages0()
+    {
+        return $this->hasMany(Message::className(), ['destinataire' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNouveautes()
+    {
+        return $this->hasMany(Nouveaute::className(), ['cree_par' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrivileges()
+    {
+        return $this->hasMany(Privilege::className(), ['cree_par' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSalles()
+    {
+        return $this->hasMany(Salle::className(), ['cree_par' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServices()
+    {
+        return $this->hasMany(Service::className(), ['cree_par' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLang0()
+    {
+        return $this->hasOne(Langue::className(), ['id' => 'lang']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRole0()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'role']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFonction0()
+    {
+        return $this->hasOne(Fonction::className(), ['id' => 'fonction']);
+    }
+    
+    /**
+     * @inheritdoc
+     * @return UserQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
+    
+    
+    public function upload()
+    {
+        if ($this->validate()) {
+            $chemin = "uploads/".md5($this->mail);
+  
+            if ( ! is_dir($chemin."/")) {
+                mkdir($chemin."/");
             }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
+            
+            if ($this->imagePhoto) {
+                $cheminPhoto = $chemin."/photo.".$this->imagePhoto->extension;
+                $this->imagePhoto->saveAs($cheminPhoto);
+                $this->photo = "/".$cheminPhoto;
+                $this->offsetUnset('imagePhoto');
             }
+            if ($this->imageLogo) {
+                $cheminLogo = $chemin."/logo.".$this->imageLogo->extension;
+                $this->imageLogo->saveAs($cheminLogo);
+                $this->logo = "/".$cheminLogo;
+                $this->offsetUnset('imageLogo');
+            }
+            
+            $this->save();
+            return true;
+            
+            
+        } else {
+            //var_dump($this->errors);
+            //Yii::trace($this->errors);
+            return false;
         }
-
-        return null;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
-    }
+    
 }
