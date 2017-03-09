@@ -32,10 +32,10 @@ class UserQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
     
-    public function onlyUsers($db = null)
+    public function onlyClients($db = null)
     {
         $query = $this->joinWith('role0');
-        $query->andWhere(['=', 'type', 2]);
+        $query->andWhere(['=', 'type', 'client']);
         return $query;
     }
     

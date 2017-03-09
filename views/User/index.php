@@ -25,11 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+
+            [
+                'attribute' => 'nom_role',
+                'label'     => Yii::t('app', 'role'),
+                'value'     => 'role0.nom'
+            ],
             'nom',
             'prenom',
             'mail',
-            'login',
+            // 'login',
             // 'pass',
             // 'lang',
             // 'role',
@@ -38,7 +43,21 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'adresse',
             // 'couleur_interface',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        if ($model->role0->type == "admin" || $model->role0->type == "superadmin") {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view-admin", "id"=>$key]);
+                        }else {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url);
+                        }
+                        
+                    },
+                ],
+                'template' => '{view}{update}{delete}',
+            
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

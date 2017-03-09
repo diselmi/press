@@ -35,7 +35,7 @@ class AdminQuery extends \yii\db\ActiveQuery
     public function onlyAdmins($db = null)
     {
         $query = $this->joinWith('role0');
-        $query->andWhere(['=', 'type', 0]);
+        $query->andWhere(['=', 'type', 'admin']);
         return $query;
     }
 }

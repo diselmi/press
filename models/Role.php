@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $nom
- * @property integer $type
+ * @property string $type
  *
  * @property User[] $users
  */
@@ -30,8 +30,7 @@ class Role extends \yii\db\ActiveRecord
     {
         return [
             [['nom', 'type'], 'required'],
-            [['type'], 'integer'],
-            [['nom'], 'string', 'max' => 32],
+            [['nom', 'type'], 'string', 'max' => 32],
         ];
     }
 

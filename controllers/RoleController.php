@@ -9,6 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\helpers\ArrayHelper;
+use app\models\User;
+use app\models\UserSearch;
+
 /**
  * RoleController implements the CRUD actions for Role model.
  */
@@ -68,8 +72,16 @@ class RoleController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            
+            $query = User::find();
+            $users_array = ArrayHelper::map($query->asArray()->all(), 'id', 'mail');
+            
+            //var_dump($users_array);
+            //Yii::$app->end();
+            
             return $this->render('create', [
                 'model' => $model,
+                'users_array' => $users_array,
             ]);
         }
     }
@@ -87,8 +99,12 @@ class RoleController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            
+            $query = User::find();
+            $users_array = ArrayHelper::map($query->asArray()->all(), 'id', 'mail');
             return $this->render('update', [
                 'model' => $model,
+                'users_array' => $users_array,
             ]);
         }
     }
@@ -121,4 +137,50 @@ class RoleController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    
+    public function actionAffectation($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model !== null) {
+            $searchModel = new UserSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            return $this->render('affecter', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        
+    }
+    
+    public function actionAffecterAjax($id_role, $id_user)
+    {
+        $role = Role::findOne($id_role);
+        $user = User::findOne($id_user);
+        if ($role !== null && $user !== null) {
+            $user->role = $id_role;
+            if ($user->save()) {
+                return $this->actionAffectation($id_role);
+            }else {
+                var_dump($user);
+            }
+            
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
 }

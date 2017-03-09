@@ -18,8 +18,9 @@ class RoleSearch extends Role
     public function rules()
     {
         return [
-            [['id', 'type'], 'integer'],
-            [['titre'], 'safe'],
+            [['id'], 'integer'],
+            [['nom'], 'safe'],
+            [['type'], 'safe'],
         ];
     }
 
@@ -42,6 +43,7 @@ class RoleSearch extends Role
     public function search($params)
     {
         $query = Role::find();
+        //$query->andFilterWhere(['not like', 'type', 'superadmin']);
 
         // add conditions that should always apply here
 
@@ -60,10 +62,10 @@ class RoleSearch extends Role
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'type' => $this->type,
         ]);
 
-        $query->andFilterWhere(['like', 'titre', $this->titre]);
+        $query->andFilterWhere(['like', 'nom', $this->nom]);
+        $query->andFilterWhere(['like', 'type', $this->type]);
 
         return $dataProvider;
     }

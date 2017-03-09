@@ -49,6 +49,7 @@ class User extends \yii\db\ActiveRecord
      */
     public $imageLogo;
     
+    public $role_type;
     
     /**
      * @inheritdoc
@@ -235,6 +236,7 @@ class User extends \yii\db\ActiveRecord
                 $this->offsetUnset('imageLogo');
             }
             
+            $this->offsetUnset('role_type');
             $this->save();
             return true;
             

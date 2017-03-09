@@ -12,14 +12,20 @@ use app\models\User;
  */
 class UserSearch extends User
 {
+    
+    public $nom_role;
+    public $nom_fonction;
+    
+    
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'lang', 'couleur_interface'], 'integer'],
-            [['nom', 'prenom', 'mail', 'login', 'pass', 'role', 'fonction', 'logo', 'adresse'], 'safe'],
+            [['id', 'lang', 'couleur_interface', 'role', 'fonction'], 'integer'],
+            [['nom', 'prenom', 'mail', 'login', 'pass', 'logo', 'adresse'], 'safe'],
+            [['nom_role', 'nom_fonction'], 'safe']
         ];
     }
 
@@ -41,38 +47,45 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find()->onlyUsers();
+        $query = User::find()->joinWith('role0');
+        
+        
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $dataProvider->sort->attributes['nom_role'] = [
+            'asc' => ['role.nom' => SORT_ASC],
+            'desc' => ['role.nom' => SORT_DESC],
+        ];
 
         $this->load($params);
-
+        
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'lang' => $this->lang,
             'couleur_interface' => $this->couleur_interface,
+            'role' => $this->role,
+            'fonction' => $this->fonction,
         ]);
 
         $query->andFilterWhere(['like', 'nom', $this->nom])
             ->andFilterWhere(['like', 'prenom', $this->prenom])
             ->andFilterWhere(['like', 'mail', $this->mail])
             ->andFilterWhere(['like', 'login', $this->login])
-            ->andFilterWhere(['like', 'pass', $this->pass])
-            ->andFilterWhere(['like', 'role', $this->role])
-            ->andFilterWhere(['like', 'fonction', $this->fonction])
-            ->andFilterWhere(['like', 'logo', $this->logo])
-            ->andFilterWhere(['like', 'adresse', $this->adresse]);
+            ->andFilterWhere(['like', 'adresse', $this->adresse])
+            ->andFilterWhere(['like', 'role.nom', $this->nom_role])
+            ->andFilterWhere(['like', 'fonction.nom', $this->nom_fonction]);
 
         return $dataProvider;
     }

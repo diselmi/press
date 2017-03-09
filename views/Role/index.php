@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Create Role'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,10 +26,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'titre',
+            'nom',
             'type',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'affectation' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>', $url);
+                    },
+                ],
+                'template' => '{view}{update}{delete}{affectation}',
+            
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

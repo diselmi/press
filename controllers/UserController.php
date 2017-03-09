@@ -21,6 +21,7 @@ use yii\web\UploadedFile;
  */
 class UserController extends Controller
 {
+    
     /**
      * @inheritdoc
      */
@@ -64,6 +65,18 @@ class UserController extends Controller
     }
 
     /**
+     * Displays a single User model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionViewAdmin($id)
+    {
+        return $this->render('view-admin', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -76,9 +89,6 @@ class UserController extends Controller
         $model->imageLogo = UploadedFile::getInstance($model, 'logo');
         
         if ($model->load(Yii::$app->request->post()) ) {
-            //var_dump(Yii::$app->request->post() );
-            //Yii::$app->end();
-            //$model->role = '4';
             $model->login = $model->mail;
             $model->pass = bin2hex(random_bytes(5));
             if ($this->validateFonctionField(Yii::$app->request->post(), $model)) {
@@ -93,6 +103,8 @@ class UserController extends Controller
             'model' => $model,
             'lang_array' => $this->getLangList(),
             'role_array' => $this->getRoleList(),
+            'role_admin_array' => $this->getRoleList("nom",1),
+            'role_types_array' => $this->getRoleList("type"),
             'fonction_array' => $this->getFonctionList(),
         ]);
     }
@@ -107,16 +119,21 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
         
+        $model->role_type = $model->role0->type;
+        
         $model->imagePhoto = UploadedFile::getInstance($model, 'photo');
         $model->imageLogo = UploadedFile::getInstance($model, 'logo');
 
         if ($model->load(Yii::$app->request->post()) ) {
             
+            // verifier Couleur interface
             if ($model->couleur_interface && (strlen($model->couleur_interface) != 7) && !ctype_xdigit($model->couleur_interface)) {
                 $model->couleur_interface = null;
             }
+            
+            // Valider champ Fonction
             if ($this->validateFonctionField(Yii::$app->request->post(), $model)) {
-                //var_dump($model->fonction);
+                //var_dump(Yii::$app->request->post());
                 //Yii::$app->end();
                 if ($model->save() && $model->upload()) {
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -128,6 +145,8 @@ class UserController extends Controller
             'model' => $model,
             'lang_array' => $this->getLangList(),
             'role_array' => $this->getRoleList(),
+            'role_admin_array' => $this->getRoleList("nom",1),
+            'role_types_array' => $this->getRoleList("type"),
             'fonction_array' => $this->getFonctionList(),
         ]);
     }
@@ -167,11 +186,21 @@ class UserController extends Controller
         return ArrayHelper::map($dataProvider->asArray()->all(), 'id', 'nom');
     }
     
-    protected function getRoleList()
+    protected function getRoleList($param = "nom", $admin=0)
     {
-        $dataProvider = Role::find()->userRoles();
-        return ArrayHelper::map($dataProvider->asArray()->all(), 'id', 'nom');
+        if ($param == "type") {
+            $dataProvider = Role::find()->allRolesTypes();
+            return ArrayHelper::map($dataProvider->asArray()->all(), 'type', "type");
+        }elseif($admin == 1){
+            $dataProvider = Role::find()->adminRoles();
+            return ArrayHelper::map($dataProvider->asArray()->all(), 'id', "nom");
+        }else {
+            $dataProvider = Role::find()->userRoles();
+            return ArrayHelper::map($dataProvider->asArray()->all(), 'id', "nom");
+        }
+        
     }
+    
     
     protected function getFonctionList()
     {
