@@ -3,28 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Dev/wamp/www/press/views/User/update.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/Role/create.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/Role/view.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/User/view.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/Role/affecter.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/Role/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/RoleSearch.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/User/index.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
             <file>file:/C:/Dev/wamp/www/press/models/User.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/FonctionController.php</file>
             <file>file:/C:/Dev/wamp/www/press/models/UserSearch.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/User/view-admin.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_search.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/AdminQuery.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Langue/index.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/RoleController.php</file>
             <file>file:/C:/Dev/wamp/www/press/models/RoleQuery.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/UserController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/User/create.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/User/_form.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/SiteController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/Role.php</file>
             <file>file:/C:/Dev/wamp/www/press/web/js/perso.js</file>
-            <file>file:/C:/Dev/wamp/www/press/web/css/perso.css</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/LangueController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/Role.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/site/index.php</file>
             <file>file:/C:/Dev/wamp/www/press/models/UserQuery.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/AdminController.php</file>
         </group>

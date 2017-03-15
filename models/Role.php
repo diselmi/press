@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $nom
  * @property string $type
+ * @property tinyint(1) $gerer_user
  *
  * @property User[] $users
  */
@@ -43,6 +44,7 @@ class Role extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'nom' => Yii::t('app', 'Nom'),
             'type' => Yii::t('app', 'Type'),
+            'gerer_user' => Yii::t('app', 'Gerer user'),
         ];
     }
 

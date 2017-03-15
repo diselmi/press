@@ -14,16 +14,28 @@ use yii\widgets\Pjax;
 <div class="role-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
-
-    <?php $type_array = array('superadmin' => Yii::t('app', 'superadmin'), 'admin' => Yii::t('app', 'admin'), 'client' => Yii::t('app', 'client')); ?>
-    <?= $form->field($model, 'type')->dropDownList($type_array) ?>
-
+    
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
-    <?php echo $form->field($model, 'users')->checkboxList($users_array); ?>
+    
+    <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
+
+    <?php $type_array = array('superadmin' => Yii::t('app', 'superadmin'), 'admin' => Yii::t('app', 'admin'), 'client' => Yii::t('app', 'client')); ?>
+    
+    <?= $form->field($model, 'type')->dropDownList($type_array) ?>
+    
+    <?php echo $form->field($model, 'users')->checkboxList($users_array, [
+        'item'=>function ($index, $label, $name, $checked, $value){
+            $affichage  = "<div class='checkbox'>";
+            $affichage .= "<label>";
+            $affichage .= "<input type='checkbox' name='$name' value='$value' ";
+            $affichage .= $checked? 'checked': '';
+            $affichage .= "> $label</label></div>";
+            return $affichage ;
+        }
+        
+    ]);?>
     
     
     

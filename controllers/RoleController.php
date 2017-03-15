@@ -163,6 +163,7 @@ class RoleController extends Controller
         $role = Role::findOne($id_role);
         $user = User::findOne($id_user);
         if ($role !== null && $user !== null) {
+            
             $user->role = $id_role;
             if ($user->save()) {
                 return $this->actionAffectation($id_role);

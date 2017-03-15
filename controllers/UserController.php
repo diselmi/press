@@ -103,7 +103,7 @@ class UserController extends Controller
             'model' => $model,
             'lang_array' => $this->getLangList(),
             'role_array' => $this->getRoleList(),
-            'role_admin_array' => $this->getRoleList("nom",1),
+            'role_admin_array' => $this->getRoleList("nom",1), // admin only
             'role_types_array' => $this->getRoleList("type"),
             'fonction_array' => $this->getFonctionList(),
         ]);

@@ -55,7 +55,11 @@ $(".user-form").submit(function( event ) {
 
 $(function() {
     //newFonctionCheck();
-    userRoleChanged($("#user-role_type").get(0));
+    if ($("#user-role_type").get(0)) {
+        // charger les roles 
+        userRoleChanged($("#user-role_type").get(0));
+    }
+    
 });
 
 

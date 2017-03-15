@@ -12,8 +12,14 @@ use app\models\User;
  */
 class UserSearch extends User
 {
-    
+    /**
+     * @var string
+     */
     public $nom_role;
+    
+    /**
+     * @var string
+     */
     public $nom_fonction;
     
     
@@ -69,17 +75,13 @@ class UserSearch extends User
             // $query->where('0=1');
             return $dataProvider;
         }
-        
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'lang' => $this->lang,
-            'couleur_interface' => $this->couleur_interface,
-            'role' => $this->role,
-            'fonction' => $this->fonction,
         ]);
 
-        $query->andFilterWhere(['like', 'nom', $this->nom])
+        $query->andFilterWhere(['like', 'user.nom', $this->nom])
             ->andFilterWhere(['like', 'prenom', $this->prenom])
             ->andFilterWhere(['like', 'mail', $this->mail])
             ->andFilterWhere(['like', 'login', $this->login])

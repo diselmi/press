@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create Role'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(['id'=>'pjax-role-gridview', 'enablePushState' => true]); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -35,8 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'affectation' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-list"></span>', $url);
                     },
+                    
                 ],
+                'header' => Yii::t('app', 'Action'),
                 'template' => '{view}{update}{delete}{affectation}',
+                'visibleButtons' => [
+                    'update' => function ($model_u, $key, $index) {
+                        return $model_u->type == "superadmin" ? false : true;
+                    },
+                    'delete' => function ($model_u, $key, $index) {
+                        return $model_u->type == "superadmin" ? false : true;
+                    },
+                    'affectation' => function ($model_u, $key, $index) {
+                        return $model_u->type == "superadmin" ? false : true;
+                    }
+                ]
             
             ],
         ],
