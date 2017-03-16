@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -60,6 +61,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        //Yii::$app->user->switchIdentity(User::findIdentity(3));
+        //var_dump(Yii::$app->user);
+        //Yii::$app->end();
         return $this->render('index');
     }
 
@@ -120,6 +124,10 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        if (!Yii::$app->user->isGuest) {
+            Yii::$app->user->identity->switchWich(3);
+        }
+        
         return $this->render('about');
     }
 }

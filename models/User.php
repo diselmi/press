@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\UploadedFile;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -37,7 +38,7 @@ use yii\web\UploadedFile;
  * @property Role $role0
  * @property Fonction $fonction0
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     
     /**
@@ -50,6 +51,8 @@ class User extends \yii\db\ActiveRecord
     public $imageLogo;
     
     public $role_type;
+    
+    public $identity;
     
     /**
      * @inheritdoc
@@ -248,4 +251,55 @@ class User extends \yii\db\ActiveRecord
         }
     }
     
+    
+    ////////////////////
+    // IdentityInterface
+    ////////////////////
+    
+    public function validerPass($pass)
+    {
+        return ($this->pass == $pass);
+    }
+
+    public function getAuthKey() {
+        return "AuthKey";
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function validateAuthKey($authKey) {
+        return true;
+    }
+
+    public static function findIdentity($id) {
+        return User::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null) {
+        return User::find()->andFilterWhere([
+            'id' => $token,
+        ]);
+    }
+    
+    /***************/
+    
+    public function switchWich($id = 3) {
+        Yii::$app->user->switchIdentity(User::findIdentity($id));
+    }
+    
+    
+    ////////////////////
+    // Autorisations
+    ////////////////////
+    
+    public function estAutorise($user_id, $permission){
+        return 1;
+    }
+    
+    public function estCreateur($user_id, $model_name, $model_id){
+        return 1;
+    }
+
 }

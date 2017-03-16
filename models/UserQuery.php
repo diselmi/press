@@ -38,5 +38,6 @@ class UserQuery extends \yii\db\ActiveQuery
         $query->andWhere(['=', 'type', 'client']);
         return $query;
     }
+   
     
 }

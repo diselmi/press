@@ -25,6 +25,12 @@ use yii\widgets\Pjax;
     
     <?= $form->field($model, 'type')->dropDownList($type_array) ?>
     
+    <div>
+        <h3>Permissions</h3>
+    </div>
+    
+    <?= $form->field($model, 'gerer_user')->checkbox(['label'=>Yii::t('app', 'gerer les utilisateurs')]) ?>
+    
     <?php echo $form->field($model, 'users')->checkboxList($users_array, [
         'item'=>function ($index, $label, $name, $checked, $value){
             $affichage  = "<div class='checkbox'>";
