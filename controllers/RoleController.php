@@ -7,6 +7,7 @@ use app\models\Role;
 use app\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
 use yii\helpers\ArrayHelper;
@@ -32,6 +33,17 @@ class RoleController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission, $id=null){
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }elseif ($cUser && $id){
+            if ($this->findModel($id)->ajoute_par != $cUser->id ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+            }
+        }
+    }
 
     /**
      * Lists all Role models.
@@ -55,6 +67,8 @@ class RoleController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('role_gerer');
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,6 +81,7 @@ class RoleController extends Controller
      */
     public function actionCreate()
     {
+        $this->checkAutorisation('role_gerer');
         $model = new Role();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -94,6 +109,7 @@ class RoleController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkAutorisation('role_gerer');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -117,7 +133,17 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->checkAutorisation('role_gerer');
+        //$this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ($model) {
+            if (empty($model->users)) {
+                $model->delete();
+            }else {
+                //throw new NotFoundHttpException("Role has users");
+                Yii::$app->session->addFlash(500, "Role has users");
+            }
+        }
 
         return $this->redirect(['index']);
     }

@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}{update}{delete}{affectation}',
                 'visibleButtons' => [
                     'update' => function ($model_u, $key, $index) {
-                        return $model_u->type == "superadmin" ? false : true;
+                        return $model_u->nom == "superadmin" ? false : true;
                     },
                     'delete' => function ($model_u, $key, $index) {
-                        return $model_u->type == "superadmin" ? false : true;
+                        return $model_u->nom == "superadmin" ? false : true;
                     },
                     'affectation' => function ($model_u, $key, $index) {
-                        return $model_u->type == "superadmin" ? false : true;
+                        return $model_u->nom == "superadmin" ? false : true;
                     }
                 ]
             

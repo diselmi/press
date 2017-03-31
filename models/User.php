@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property string $adresse
  * @property string $domaines
  * @property string $couleur_interface
+ * @property integer $superieur
  *
  * @property Abonnement[] $abonnements
  * @property Abonnement[] $abonnements0
@@ -37,6 +38,7 @@ use yii\web\IdentityInterface;
  * @property Langue $lang0
  * @property Role $role0
  * @property Fonction $fonction0
+ * @property User $superieur0
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -208,6 +210,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSuperieur0()
+    {
+        return $this->hasOne(User::className(), ['id' => 'superieur']);
+    }
+    
+    /**
      * @inheritdoc
      * @return UserQuery the active query used by this AR class.
      */
@@ -231,6 +241,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->imagePhoto->saveAs($cheminPhoto);
                 $this->photo = "/".$cheminPhoto;
                 $this->offsetUnset('imagePhoto');
+            }else {
+                $this->photo = "/images/profile_holder_m.jpg";
             }
             if ($this->imageLogo) {
                 $cheminLogo = $chemin."/logo.".$this->imageLogo->extension;
@@ -285,7 +297,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     /***************/
     
-    public function switchWich($id = 3) {
+    public function switchWith($id = 3) {
         Yii::$app->user->switchIdentity(User::findIdentity($id));
     }
     
@@ -293,10 +305,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     ////////////////////
     // Autorisations
     ////////////////////
-    
-    public function estAutorise($user_id, $permission){
-        return 1;
-    }
+
     
     public function estCreateur($user_id, $model_name, $model_id){
         return 1;

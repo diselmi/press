@@ -32,12 +32,9 @@ use kartik\file\FileInput;
 
     <?= $form->field($model, 'lang')->dropDownList($lang_array) ?>
     
-    <?= $form->field($model, 'role_type')->dropDownList($role_types_array, ['onchange' => 'userRoleChanged(this);']) ?>
-
+    <?= $form->field($model, 'role')->dropDownList($role_admin_array, ['onchange' => 'userRoleChanged(this);']) ?>
     
     <div id="user_form_client">
-        
-        <?= $form->field($model, 'role')->dropDownList($role_array) ?>
     
         <?= $form->field($model, 'fonction')->dropDownList($fonction_array) ?>
 
@@ -64,9 +61,6 @@ use kartik\file\FileInput;
         
     </div>
     
-    <div id="user_form_role_admin">
-        <?= $form->field($model, 'role')->dropDownList($role_admin_array) ?>
-    </div>
     
     <?php    if ( !$model->isNewRecord) { ?>
 

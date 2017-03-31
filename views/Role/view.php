@@ -2,11 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Role */
 
-$this->title = $model->id;
+$this->title = $model->id.": ".$model->nom;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Roles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,8 +39,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nom',
             'type',
-            'gerer_user',
+            'user_gerer:boolean',
+            'role_gerer:boolean',
         ],
     ]) ?>
+    
+    
+    <h2> <?= Yii::t('app', 'assigned users') ?>: </h2>
+    
+    <?php
+        $usersProvider = new ArrayDataProvider([
+            'allModels' => $model->users,
+            'sort' => [
+                'attributes' => ['id', 'nom', 'mail'],
+            ],
+            'pagination' => [
+                'pageSize' => 2,
+            ],
+        ]);
+    ?>
+    
+    <?= GridView::widget([
+        'dataProvider' => $usersProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'nom',
+            'mail',
+
+        ],
+    ]); ?>
+
 
 </div>

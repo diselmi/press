@@ -20,16 +20,13 @@ use yii\widgets\Pjax;
     </div>
     
     <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
-
-    <?php $type_array = array('superadmin' => Yii::t('app', 'superadmin'), 'admin' => Yii::t('app', 'admin'), 'client' => Yii::t('app', 'client')); ?>
-    
-    <?= $form->field($model, 'type')->dropDownList($type_array) ?>
     
     <div>
         <h3>Permissions</h3>
     </div>
     
-    <?= $form->field($model, 'gerer_user')->checkbox(['label'=>Yii::t('app', 'gerer les utilisateurs')]) ?>
+    <?= $form->field($model, 'user_gerer')->checkbox(['label'=>Yii::t('app', 'gerer les utilisateurs')]) ?>
+    <?= $form->field($model, 'role_gerer')->checkbox(['label'=>Yii::t('app', 'gerer les roles')]) ?>
     
     <?php echo $form->field($model, 'users')->checkboxList($users_array, [
         'item'=>function ($index, $label, $name, $checked, $value){

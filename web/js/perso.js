@@ -12,16 +12,17 @@ function newFonctionCheck(){
 
 function userRoleChanged(s) {
     //console.log(s);
-    //console.log(s.value);
-    if (s.value == "client") {
+    //console.log(s[s.selectedIndex].text);
+    selectedRole = s[s.selectedIndex].text;
+    if (selectedRole === "client") {
         // pjax
         //$.pjax({url: "/role/get-role-list", container: '#role_field_pjax'})
         $("#user_form_client").css("display", "inherit");
-        $("#user_form_role_admin").css("display", "none");
+        //$("#user_form_role_admin").css("display", "none");
 
     }else {
         
-        $("#user_form_role_admin").css("display", "inherit");
+        //$("#user_form_role_admin").css("display", "inherit");
         $("#user_form_client").css("display", "none");
     }
 }
@@ -42,7 +43,7 @@ $(".user-form").submit(function( event ) {
     type = $("#user-role_type").val();
     role_admin = $("#user_form_role_admin");
     console.log(type);
-    if (type == "client") {
+    if (type === "client") {
         role_admin.remove();
     }
     return ;
@@ -55,9 +56,9 @@ $(".user-form").submit(function( event ) {
 
 $(function() {
     //newFonctionCheck();
-    if ($("#user-role_type").get(0)) {
+    if ($("#user_form_role_admin").get(0)) {
         // charger les roles 
-        userRoleChanged($("#user-role_type").get(0));
+        userRoleChanged($("#user_form_role_admin").get(0));
     }
     
 });

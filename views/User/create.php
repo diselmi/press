@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'lang_array'    => $lang_array,
         'role_array' => $role_array,
         'role_admin_array' => $role_admin_array,
-        'role_types_array' => $role_types_array,
         'fonction_array' => $fonction_array,
         
     ]) ?>

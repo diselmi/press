@@ -7,8 +7,20 @@
             <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
         </group>
         <group name="www">
+            <file>file:/C:/Dev/wamp/www/press/views/User/view.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/User/index.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/User.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/UserSearch.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/view-admin.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/RoleController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/UserController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/SiteController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/site/login.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/layouts/main.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/LoginForm.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/UserQuery.php</file>
         </group>
     </open-files>
 </project-private>

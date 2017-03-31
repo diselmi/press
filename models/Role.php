@@ -9,8 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property string $nom
- * @property string $type
- * @property tinyint(1) $gerer_user
+ * @property boolean $user_gerer
+ * @property boolean $role_gerer
  *
  * @property User[] $users
  */
@@ -30,8 +30,9 @@ class Role extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nom', 'type'], 'required'],
-            [['nom', 'type'], 'string', 'max' => 32],
+            [['nom'], 'required'],
+            [['nom'], 'string', 'max' => 32],
+            [['user_gerer', 'role_gerer'], 'boolean'],
         ];
     }
 
@@ -43,8 +44,8 @@ class Role extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'nom' => Yii::t('app', 'Nom'),
-            'type' => Yii::t('app', 'Type'),
-            'gerer_user' => Yii::t('app', 'Gerer user'),
+            'user_gerer' => Yii::t('app', 'Gerer users'),
+            'role_gerer' => Yii::t('app', 'Gerer roles'),
         ];
     }
 

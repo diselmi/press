@@ -7,6 +7,7 @@ use app\models\User;
 use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\models\Langue;
@@ -32,16 +33,29 @@ class UserController extends Controller {
             ],
         ];
     }
+    
+    public function checkAutorisation($permission, $id=null){
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }elseif ($cUser && $id){
+            if ($this->findModel($id)->ajoute_par != $cUser->id ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+            }
+        }
+    }
 
     /**
      * Lists all User models.
      * @return mixed
      */
     public function actionIndex() {
+        
+        $this->checkAutorisation('user_gerer');
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
+        return $this->render('index_admin', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
@@ -53,20 +67,18 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
-        return $this->render('view', [
-                    'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Displays a single User model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionViewAdmin($id) {
-        return $this->render('view-admin', [
-                    'model' => $this->findModel($id),
-        ]);
+        $this->checkAutorisation('user_gerer');
+        $model = $this->findModel($id);
+        if ($model->role0->nom == 'client') {
+            return $this->render('view', [
+                'model' => $model,
+            ]);
+        }else {
+            return $this->render('view_admin', [
+                'model' => $model,
+            ]);
+        }
+        
     }
 
     /**
@@ -75,6 +87,7 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $this->checkAutorisation('user_gerer');
         $model = new User();
 
         $model->imagePhoto = UploadedFile::getInstance($model, 'photo');
@@ -86,7 +99,7 @@ class UserController extends Controller {
             if ($this->validateFonctionField(Yii::$app->request->post(), $model)) {
 
                 if ($model->save() && $model->upload()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['view_admin', 'id' => $model->id]);
                 }
             }
         }
@@ -96,7 +109,6 @@ class UserController extends Controller {
                     'lang_array' => $this->getLangList(),
                     'role_array' => $this->getRoleList(),
                     'role_admin_array' => $this->getRoleList("nom", 1), // admin only
-                    'role_types_array' => $this->getRoleList("type"),
                     'fonction_array' => $this->getFonctionList(),
         ]);
     }
@@ -108,6 +120,8 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionUpdate($id) {
+        $this->checkAutorisation('user_gerer');
+        
         $model = $this->findModel($id);
 
         $model->role_type = $model->role0->type;
@@ -127,7 +141,15 @@ class UserController extends Controller {
                 //var_dump(Yii::$app->request->post());
                 //Yii::$app->end();
                 if ($model->save() && $model->upload()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    //var_dump(Yii::$app->user->identity->role0);
+                    //Yii::$app->end();
+                    
+                    if ($cUser && $cUser->role0->type == 'client') {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }else {
+                        return $this->redirect(['view_admin', 'id' => $model->id]);
+                    }
+                    
                 }
             }
         }
@@ -149,6 +171,8 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
+        $this->checkAutorisation('user_gerer');
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -230,6 +254,18 @@ class UserController extends Controller {
         //var_dump($model);
         //Yii::$app->end();
         return 1;
+    }
+    
+    /*
+     * Switch users
+     */
+    public function actionSwitch($id)
+    {
+        if ($id) {
+            Yii::$app->user->identity->switchWith($id);
+        }
+        
+        return $this->goHome();
     }
     
     

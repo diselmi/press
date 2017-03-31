@@ -125,9 +125,12 @@ class SiteController extends Controller
     public function actionAbout()
     {
         if (!Yii::$app->user->isGuest) {
-            Yii::$app->user->identity->switchWich(3);
+            Yii::$app->user->identity->switchWith(3);
         }
         
         return $this->render('about');
     }
+    
+    
+    
 }
