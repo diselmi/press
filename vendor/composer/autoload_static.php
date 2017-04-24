@@ -62,6 +62,7 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
             'kartik\\grid\\' => 12,
             'kartik\\form\\' => 12,
             'kartik\\file\\' => 12,
+            'kartik\\field\\' => 13,
             'kartik\\export\\' => 14,
             'kartik\\dialog\\' => 14,
             'kartik\\depdrop\\' => 15,
@@ -76,6 +77,7 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         ),
         'd' => 
         array (
+            'dosamigos\\gallery\\' => 18,
             'dosamigos\\arrayquery\\' => 21,
             'dektrium\\user\\' => 14,
         ),
@@ -272,6 +274,10 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-fileinput',
         ),
+        'kartik\\field\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-field-range',
+        ),
         'kartik\\export\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-export',
@@ -315,6 +321,10 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         'kartik\\affix\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-affix',
+        ),
+        'dosamigos\\gallery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-gallery-widget/src',
         ),
         'dosamigos\\arrayquery\\' => 
         array (

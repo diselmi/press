@@ -6,9 +6,15 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+
 use app\models\LoginForm;
 use app\models\ContactForm;
+
 use app\models\User;
+use app\models\Nouveaute;
+use app\models\Privilege;
+
+use yii\helpers\ArrayHelper;
 
 class SiteController extends Controller
 {
@@ -64,7 +70,26 @@ class SiteController extends Controller
         //Yii::$app->user->switchIdentity(User::findIdentity(3));
         //var_dump(Yii::$app->user);
         //Yii::$app->end();
-        return $this->render('index');
+        $privileges = Privilege::find();
+        
+        return $this->render('index', [
+            'liste_nouv'    => $this->getListeNouv(),
+            'privileges'    => $privileges,
+        ]);
+    }
+    
+    public function getListeNouv()
+    {
+        $nouveautes = Nouveaute::find()->galleryQuery();
+        /*var_dump($nouveautes);
+        foreach ($nouveautes as &$nvt) {
+            $nvt["href"] = $nvt["poster"];
+            var_dump($nvt);
+        }*/
+        //$nouveautes = ArrayHelper::toArray($nouveautes, [])
+        //var_dump(json_encode($nouveautes));
+        //return json_encode($nouveautes);
+        return $nouveautes;
     }
 
     /**

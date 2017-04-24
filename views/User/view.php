@@ -30,10 +30,12 @@ $this->params['breadcrumbs'][] = $model->id;
                     'method' => 'post',
                 ],
             ]) ?>
+            
         </p> 
     </div>
     
-
+    <h3> <?= ucfirst(Yii::t('app', 'client')) ?> </h3>
+    
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -59,6 +61,59 @@ $this->params['breadcrumbs'][] = $model->id;
             'domaines',
             
             'couleur_interface',
+        ],
+    ]) ?>
+    
+    <h3> <?= Yii::t('app', 'Vis a vis') ?> </h3>
+    <?= DetailView::widget([
+        'model' => $model->abonnement0->vis_a_vis0,
+        'attributes' => [
+            [
+                'label' => Yii::t('app', 'Nom'),
+                'value' => function($model) {
+                    return $model->nom." ".$model->prenom;
+                }  
+            ],
+            [
+                'label' => Yii::t('app', 'Login'),
+                'value' => function($model) {
+                    return $model->login;
+                }  
+            ],
+            [
+                'label' => Yii::t('app', 'Mail'),
+                'value' => function($model) {
+                    return $model->mail;
+                }  
+            ],
+        ],
+    ]) ?>
+    
+    <h3> <?= Yii::t('app', 'Abonnement') ?> </h3>
+    <?= DetailView::widget([
+        'model' => $model->abonnement0,
+        'attributes' => [
+            [
+                'label' => Yii::t('app', 'Etat'),
+                'value' => function($model, $widget){
+                    /*if ($model->etat) {
+                        return Yii::t('app', 'Valide');
+                    }
+                    return Yii::t('app', 'non valide');*/
+                    return Yii::t('app', $model->etat);
+                }
+            ],
+            'date_debut',
+            'date_fin'
+        ],
+    ]) ?>
+    
+    <h3> <?= Yii::t('app', 'Acces Premium') ?> </h3>
+    <?= DetailView::widget([
+        'model' => $model->abonnement0,
+        'attributes' => [
+            'acces_salles:boolean',
+            'acces_journalistes:boolean'
         ],
     ]) ?>
 

@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'abonnement' => $abonnement,
         'lang_array'    => $lang_array,
         'role_array' => $role_array,
         'role_admin_array' => $role_admin_array,

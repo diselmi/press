@@ -24,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-
             [
                 'attribute' => 'nom_role',
                 'label'     => Yii::t('app', 'role'),
@@ -47,17 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        if ($model->role0->type == "admin" || $model->role0->type == "superadmin") {
-                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]);
-                        }else {
-                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url);
-                        }
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]);
+                        
                         
                     },
                     'switch' => function ($url, $model, $key) {
-                        if ($model->role0->type == "admin" || $model->role0->type == "superadmin") {
-                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]);
-                        }
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]);
                         
                     },
                 ],

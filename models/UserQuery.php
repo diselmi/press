@@ -38,6 +38,13 @@ class UserQuery extends \yii\db\ActiveQuery
         $query->andWhere(['=', 'type', 'client']);
         return $query;
     }
+    
+    public function onlyAdmins($db = null)
+    {
+        $query = $this->joinWith('role0');
+        $query->andWhere(['=', 'type', 'admin']);
+        return $query;
+    }
    
     
 }

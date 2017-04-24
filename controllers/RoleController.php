@@ -7,6 +7,7 @@ use app\models\Role;
 use app\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
@@ -36,12 +37,10 @@ class RoleController extends Controller
     
     public function checkAutorisation($permission, $id=null){
         $cUser = Yii::$app->user->identity;
-        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+        if ($cUser && $id && ($this->findModel($id)->cree_par != $cUser->id) ){
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-        }elseif ($cUser && $id){
-            if ($this->findModel($id)->ajoute_par != $cUser->id ) {
-                throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-            }
+        }elseif (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
         }
     }
 
@@ -51,6 +50,7 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkAutorisation('role_gerer');
         $searchModel = new RoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

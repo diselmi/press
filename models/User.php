@@ -24,9 +24,9 @@ use yii\web\IdentityInterface;
  * @property string $domaines
  * @property string $couleur_interface
  * @property integer $superieur
- *
- * @property Abonnement[] $abonnements
- * @property Abonnement[] $abonnements0
+ * @property integer $cree_par
+ * 
+ * @property Abonnement $abonnement0
  * @property Document[] $documents
  * @property Facture[] $factures
  * @property Message[] $messages
@@ -39,9 +39,11 @@ use yii\web\IdentityInterface;
  * @property Role $role0
  * @property Fonction $fonction0
  * @property User $superieur0
+ * @property User $creePar0
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    use \mootensai\relation\RelationTrait;
     
     /**
      * @var UploadedFile
@@ -79,6 +81,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['couleur_interface'], 'string', 'min' => 7, 'max' => 7],
             [['imagePhoto'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['imageLogo'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            //[['abonnement'], 'exist', 'skipOnError' => true, 'targetClass' => Abonnement::className(), 'targetAttribute' => ['client' => 'id']],
+            [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
         ];
     }
 
@@ -108,17 +112,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAbonnements()
+    public function getAbonnement0()
     {
-        return $this->hasMany(Abonnement::className(), ['client' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAbonnements0()
-    {
-        return $this->hasMany(Abonnement::className(), ['vis_a_vis' => 'id']);
+        return $this->hasOne(Abonnement::className(), ['client' => 'id']);
     }
 
     /**
@@ -218,6 +214,27 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreePar0()
+    {
+        return $this->hasOne(User::className(), ['id' => 'cree_par']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAjouts()
+    {
+        return $this->hasMany(User::className(), ['cree_par' => 'id']);
+    }
+    
+    public function getNomPrenom()
+    {
+        return $this->nom." ".$this->prenom;
+    }
+    
+    /**
      * @inheritdoc
      * @return UserQuery the active query used by this AR class.
      */
@@ -249,6 +266,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->imageLogo->saveAs($cheminLogo);
                 $this->logo = "/".$cheminLogo;
                 $this->offsetUnset('imageLogo');
+            }else {
+                $this->logo = "/images/enterprise_holder.png";
             }
             
             $this->offsetUnset('role_type');
@@ -297,8 +316,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     /***************/
     
-    public function switchWith($id = 3) {
-        Yii::$app->user->switchIdentity(User::findIdentity($id));
+    public function switchWith($id) {
+        if ($id) {
+            Yii::$app->user->switchIdentity(User::findIdentity($id));
+        }
     }
     
     

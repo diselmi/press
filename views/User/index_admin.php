@@ -49,6 +49,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]); 
                     },
+                    'update' => function ($url, $model, $key) {
+                        if ($model->role0->nom != "superadmin") {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ["update", "id"=>$key]);
+                        }  
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        if ($model->role0->nom != "superadmin") {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ["delete", "id"=>$key]);
+                        }  
+                    },
                     'switch' => function ($url, $model, $key) {
                         $cUser = Yii::$app->user;
                         if ($cUser->id != $key) {

@@ -82,7 +82,7 @@ class UserSearch extends User
         ]);
 
         $query->andFilterWhere(['like', 'user.nom', $this->nom])
-            ->andFilterWhere(['like', 'prenom', $this->prenom])
+            ->orFilterWhere(['like', 'prenom', $this->prenom])
             ->andFilterWhere(['like', 'mail', $this->mail])
             ->andFilterWhere(['like', 'login', $this->login])
             ->andFilterWhere(['like', 'adresse', $this->adresse])

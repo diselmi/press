@@ -8,11 +8,13 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\base\Exception;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\models\Langue;
 use app\models\Role;
 use app\models\Fonction;
+use app\models\Abonnement;
 use yii\web\UploadedFile;
 
 /**
@@ -36,12 +38,13 @@ class UserController extends Controller {
     
     public function checkAutorisation($permission, $id=null){
         $cUser = Yii::$app->user->identity;
-        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+        if ($id && $this->findModel($id)->role0->nom == "superadmin") {
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-        }elseif ($cUser && $id){
-            if ($this->findModel($id)->ajoute_par != $cUser->id ) {
-                throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-            }
+        }
+        if ($cUser && $id && ($this->findModel($id)->cree_par != $cUser->id) ){
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }elseif (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
         }
     }
 
@@ -89,23 +92,63 @@ class UserController extends Controller {
     public function actionCreate() {
         $this->checkAutorisation('user_gerer');
         $model = new User();
+        $abonnement = new Abonnement();
+        $abonnement->date_debut = date('d-m-Y');
+        $abonnement->date_fin = date('d-m-Y');
 
         $model->imagePhoto = UploadedFile::getInstance($model, 'photo');
         $model->imageLogo = UploadedFile::getInstance($model, 'logo');
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $abonnement->load(Yii::$app->request->post()) ) {
             $model->login = $model->mail;
             $model->pass = bin2hex(random_bytes(5));
+            $abonnement->date_debut = date_format(new \Datetime($abonnement->date_debut), "Y-m-d");
+            $abonnement->date_fin = date_format(new \Datetime($abonnement->date_fin), "Y-m-d");
+            //var_dump($abonnement);
+            //Yii::$app->end();
+            
+            
             if ($this->validateFonctionField(Yii::$app->request->post(), $model)) {
-
-                if ($model->save() && $model->upload()) {
-                    return $this->redirect(['view_admin', 'id' => $model->id]);
+                
+                //$abonnement->link("client0", $model);
+                $model->cree_par = Yii::$app->user->id;
+                $abonnement->vis_a_vis = Yii::$app->user->id;
+                $abonnement->etat = 1;
+                
+                $db = Yii::$app->db; $transaction = $db->beginTransaction();
+                
+                if (! $model->save()) {
+                    throw new Exception("Cannot save the User \n". implode(", ", array_values($model->errors)[0]) );
+                }else{
+                    $abonnement->client = $model->id;
+                    
+                    if (!$abonnement->save()) {
+                        $transaction->rollBack();
+                        throw new Exception("Cannot save the Abonnement \n". implode(", ", array_values($abonnement->errors)[0]) );
+                    }else {
+                        $transaction->commit();
+                        
+                    }  
+                }
+                
+                
+                
+                if ($model->upload()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else {
+                    //var_dump($model->errors);
+                    //var_dump($model->abonnement->attributes);
+                    //Yii::$app->end();
                 }
             }
+        }else {
+            //var_dump($model->load(Yii::$app->request->post()));
+            //Yii::$app->end();
         }
 
         return $this->render('create', [
                     'model' => $model,
+                    'abonnement' => $abonnement,
                     'lang_array' => $this->getLangList(),
                     'role_array' => $this->getRoleList(),
                     'role_admin_array' => $this->getRoleList("nom", 1), // admin only
@@ -120,9 +163,13 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionUpdate($id) {
-        $this->checkAutorisation('user_gerer');
+        $this->checkAutorisation('user_gerer', $id);
         
         $model = $this->findModel($id);
+//        $model->abonnement = new Abonnement();
+//        if ($model->abonnement0 === null) {
+//            $model->abonnement = new Abonnement();
+//        }
 
         $model->role_type = $model->role0->type;
 
@@ -138,18 +185,19 @@ class UserController extends Controller {
 
             // Valider champ Fonction
             if ($this->validateFonctionField(Yii::$app->request->post(), $model)) {
-                //var_dump(Yii::$app->request->post());
+//                $model->link("abonnement0", $model->abonnement);
+//                var_dump(Yii::$app->request->post());
+//                Yii::$app->end();
+                //var_dump($model);
                 //Yii::$app->end();
+                if (!$model->cree_par) {
+                    $model->cree_par = Yii::$app->user->id;
+                }
                 if ($model->save() && $model->upload()) {
                     //var_dump(Yii::$app->user->identity->role0);
                     //Yii::$app->end();
                     
-                    if ($cUser && $cUser->role0->type == 'client') {
-                        return $this->redirect(['view', 'id' => $model->id]);
-                    }else {
-                        return $this->redirect(['view_admin', 'id' => $model->id]);
-                    }
-                    
+                    return $this->redirect(['view', 'id' => $model->id]); 
                 }
             }
         }
@@ -171,9 +219,9 @@ class UserController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->checkAutorisation('user_gerer');
+        $this->checkAutorisation('user_gerer', $id);
         
-        $this->findModel($id)->delete();
+        //$this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

@@ -11,7 +11,7 @@ function newFonctionCheck(){
 }
 
 function userRoleChanged(s) {
-    //console.log(s);
+    console.log(s);
     //console.log(s[s.selectedIndex].text);
     selectedRole = s[s.selectedIndex].text;
     if (selectedRole === "client") {
@@ -56,9 +56,9 @@ $(".user-form").submit(function( event ) {
 
 $(function() {
     //newFonctionCheck();
-    if ($("#user_form_role_admin").get(0)) {
+    if ($("#user-role").get(0)) {
         // charger les roles 
-        userRoleChanged($("#user_form_role_admin").get(0));
+        userRoleChanged($("#user-role").get(0));
     }
     
 });

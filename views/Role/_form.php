@@ -19,6 +19,9 @@ use yii\widgets\Pjax;
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
     
+    <?php $types_roles = array("admin"=> Yii::t("app",'admin'), "client"=> Yii::t("app",'client')) ?>
+    
+    <?= $form->field($model, 'type')->dropDownList($types_roles) ?>
     <?= $form->field($model, 'nom')->textInput(['maxlength' => true]) ?>
     
     <div>
@@ -28,7 +31,7 @@ use yii\widgets\Pjax;
     <?= $form->field($model, 'user_gerer')->checkbox(['label'=>Yii::t('app', 'gerer les utilisateurs')]) ?>
     <?= $form->field($model, 'role_gerer')->checkbox(['label'=>Yii::t('app', 'gerer les roles')]) ?>
     
-    <?php echo $form->field($model, 'users')->checkboxList($users_array, [
+    <?php /*echo $form->field($model, 'users')->checkboxList($users_array, [
         'item'=>function ($index, $label, $name, $checked, $value){
             $affichage  = "<div class='checkbox'>";
             $affichage .= "<label>";
@@ -38,7 +41,7 @@ use yii\widgets\Pjax;
             return $affichage ;
         }
         
-    ]);?>
+    ]);*/ ?>
     
     
     
