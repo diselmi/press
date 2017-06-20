@@ -10,10 +10,14 @@ use yii\base\Model;
  */
 class ContactForm extends Model
 {
-    public $name;
+    public $rc; // raison sociale
+    public $nom;
+    public $prenom;
+    public $numtel;
     public $email;
-    public $subject;
-    public $body;
+    public $adresse;
+    public $objet;
+    public $contenu;
     public $verifyCode;
 
 
@@ -24,7 +28,7 @@ class ContactForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['name', 'email', 'subject', 'body'], 'required'],
+            [['nom', 'prenom', 'email', 'objet', 'contenu'], 'required'],
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
@@ -38,7 +42,14 @@ class ContactForm extends Model
     public function attributeLabels()
     {
         return [
-            'verifyCode' => 'Verification Code',
+            'rc' => Yii::t('app', 'Raison sociale'),
+            'nom' => Yii::t('app', 'Nom'),
+            'prenom' => Yii::t('app', 'Prenom'),
+            'email' => Yii::t('app', 'Email'),
+            'numtel' => Yii::t('app', 'Telephone'),
+            'objet' => Yii::t('app', 'Objet'),
+            'contenu' => Yii::t('app', 'Contenu'),
+            'verifyCode' => 'Code de verification',
         ];
     }
 
@@ -50,12 +61,34 @@ class ContactForm extends Model
     public function contact($email)
     {
         if ($this->validate()) {
-            Yii::$app->mailer->compose()
+            /*Yii::$app->mailer->compose()
                 ->setTo($email)
-                ->setFrom([$this->email => $this->name])
-                ->setSubject($this->subject)
-                ->setTextBody($this->body)
-                ->send();
+                ->setFrom([$this->email => $this->prenom." ".$this->nom])
+                ->setSubject($this->objet)
+                ->setTextBody($this->contenu)
+                ->send();*/
+            $contenu_rc = $this->rc ? "Raison sociale: ". $this->rc . "\n" : "";
+            $mailbody = "<h3>Formulaire de contact:</h3> <br>"
+                . $contenu_rc
+                . "<b>Nom:</b> " . $this->prenom." ".$this->nom . "<br>"
+                . "<b>Email:</b> " . $this->email . "<br>"
+                . "<b>Objet:</b> " . $this->objet . "<br>"
+                . "<b>Contenu:</b><br>" . $this->contenu;
+            
+             try {
+                Yii::$app->mailer->compose('layouts/html', [
+                        'content' => $mailbody
+                    ])
+                    ->setFrom($email)
+                    ->setTo('selmi.aladdin@gmail.com')
+                    ->setReplyTo([$this->email => $this->prenom." ".$this->nom." (".$this->rc.")"])
+                    ->setSubject($this->objet)
+                    //->setHtmlBody($mailbody)
+                    ->send();
+             } catch (Swift_TransportException $ex) {
+                 
+             }
+            
 
             return true;
         }

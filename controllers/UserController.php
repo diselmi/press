@@ -221,7 +221,7 @@ class UserController extends Controller {
     public function actionDelete($id) {
         $this->checkAutorisation('user_gerer', $id);
         
-        //$this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

@@ -28,11 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            'id',           
             [
                 'label' => ucfirst(Yii::t("app", "cree_par")),
                 'value' => $model->creePar->nom." ".$model->creePar->prenom
             ],
+            'auteur',
             'titre',
             'libelle_court',
             'libelle_long',

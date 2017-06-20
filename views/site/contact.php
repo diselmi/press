@@ -8,12 +8,12 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = 'Contact';
+$this->title = Yii::t("app", 'Contact');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
-
+    
     <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
         <div class="alert alert-success">
@@ -32,10 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
 
     <?php else: ?>
-
+        <?php if(isset($model->errors[0])) echo $model->errors[0]; ?>
         <p>
-            If you have business inquiries or other questions, please fill out the following form to contact us.
-            Thank you.
+            <a href="/subscription">Click here</a> to ask for subscription.
         </p>
 
         <div class="row">
@@ -43,13 +42,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
-                    <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+                    <?= $form->field($model, 'rs')->textInput(['autofocus' => true]) ?>
 
+                    <?= $form->field($model, 'nom') ?>
+
+                    <?= $form->field($model, 'prenom') ?>
+                
                     <?= $form->field($model, 'email') ?>
+                
+                    <?= $form->field($model, 'numtel') ?>
+                
+                    <?= $form->field($model, 'adresse') ?>
 
-                    <?= $form->field($model, 'subject') ?>
+                    <?= $form->field($model, 'objet') ?>
 
-                    <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($model, 'contenu')->textarea(['rows' => 6]) ?>
 
                     <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                         'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
@@ -63,6 +70,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
         </div>
-
     <?php endif; ?>
 </div>

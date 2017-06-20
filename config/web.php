@@ -26,7 +26,15 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'selmi.trade@gmail.com',
+                'password' => 'selmicommerce',
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -48,8 +56,8 @@ $config = [
             ],
         ],
         'formatter' => [
-            'dateFormat' => 'd-M-Y',
-            'datetimeFormat' => 'd-M-Y H:i:s',
+            'dateFormat' => 'd-MM-yyyy',
+            'datetimeFormat' => 'd-MM-yyyy H:i:s',
             'timeFormat' => 'H:i:s',
 
             //'locale' => 'de-DE', //your language locale
@@ -77,7 +85,7 @@ $config['modules']['datecontrol'] = [
 
     // format settings for saving each date attribute (PHP format example)
     'saveSettings' => [
-        Module::FORMAT_DATE => 'Y-m-d',
+        Module::FORMAT_DATE => 'php:Y-m-d',
         Module::FORMAT_TIME => 'php:H:i:s',
         Module::FORMAT_DATETIME => 'php:Y-m-d H:i:s',
     ],
@@ -107,7 +115,7 @@ $config['modules']['datecontrol'] = [
         Module::FORMAT_DATE => [
             'class' => 'yii\jui\DatePicker', // example
             'options' => [
-                'dateFormat' => 'php:d-M-Y',
+                //'dateFormat' => 'php:d-M-Y',
                 'options' => ['class'=>'form-control'],
             ]
         ]

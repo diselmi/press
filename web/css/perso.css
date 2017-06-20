@@ -19,6 +19,7 @@ and open the template in the editor.
     height: 150px;
     overflow: hidden;
     position: relative;
+    background-color: #d8dadc;
 }
 
 .profile_picture_admin img {
@@ -48,6 +49,30 @@ table .glyphicon {
 
 #user_form_client {
     display: none;
+}
+
+/* Gallery */
+
+.gallery-item {
+    display: inline-block;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+    max-width: 150px;
 }
 
 

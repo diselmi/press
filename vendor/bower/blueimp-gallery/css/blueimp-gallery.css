@@ -51,7 +51,7 @@
   touch-action: pan-y;
 }
 .blueimp-gallery-display {
-  display: block;
+  /*display: block;*/
   opacity: 1;
 }
 .blueimp-gallery > .slides {

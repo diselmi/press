@@ -48,7 +48,7 @@ class Nouveaute extends \yii\db\ActiveRecord
             [['libelle_court'], 'string', 'max' => 256],
             [['libelle_long'], 'string', 'max' => 500],
             [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
-            [['fichier_image'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+            [['fichier_image'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
         ];
     }
 

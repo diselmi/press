@@ -1,0 +1,64 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\DetailView;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Journaliste */
+
+$this->title = $model->nom;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Journalistes'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="journaliste-view">
+
+    <div class="profile_picture_admin">
+        <?= Html::img($model->photo) ?>
+    </div>
+    
+    <div class="profile_title_admin">
+        <h1><?= ucfirst(Html::encode($this->title)) ?></h1>
+        <p>
+            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary ']) ?>
+            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger ',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+        </p> 
+    </div>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'nom',
+            'mail',
+            'numtel',
+            'siteweb',
+            'facebook',
+            'twitter',
+            'theme',
+        ],
+    ]) ?>
+    
+    <h2> <?= ucfirst(Yii::t('app', 'travaille avec')) ?>: </h2>
+    <?php foreach ($model->journalisteMedia as $media) { ?>
+    <table class="table table-bordered">
+        <tr>
+            <th class="col-md-4"> <?= ucfirst($media->media0->nom) ?> </th>
+            <td>
+                <ul>
+                <?php if($media->tv) echo "<li>".ucfirst(Yii::t('app', 'tv'))."</li>"; ?>
+                <?php if($media->radio) echo "<li>".ucfirst(Yii::t('app', 'radio'))."</li>"; ?>
+                <?php if($media->j_papier) echo "<li>".ucfirst(Yii::t('app', 'j_papier'))."</li>"; ?>
+                <?php if($media->j_electronique) echo "<li>".ucfirst(Yii::t('app', 'j_electronique'))."</li>"; ?>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <?php } ?>
+
+</div>

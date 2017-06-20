@@ -15,6 +15,9 @@ use app\models\Nouveaute;
 use app\models\Privilege;
 
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+
+use app\models\Contact;
 
 class SiteController extends Controller
 {
@@ -131,13 +134,48 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
+        $model = new Contact(['scenario' => Contact::SCENARIO_CONTACT]);
+        //$model->contact(Yii::$app->params['adminEmail']) // send email
+        
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->type = 2;
+            if ($model->save()) {
+                //Yii::$app->session->setFlash('contactFormSubmitted');
+                return $this->redirect(Url::home());
+            }else {
+                var_dump($model->errors);
+                Yii::$app->end();
+            }
         }
+        
         return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+    
+    /**
+     * Displays contact page.
+     *
+     * @return string
+     */
+    public function actionSubscription()
+    {   
+        $model = new Contact(['scenario' => Contact::SCENARIO_REGISTER]);
+        
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->type = 3;
+            if ($model->save()) {
+                //Yii::$app->session->setFlash('contactFormSubmitted');
+                return $this->redirect(Url::home());
+            }else {
+                var_dump($model->errors);
+                Yii::$app->end();
+            }
+        }
+        
+        return $this->render('register', [
             'model' => $model,
         ]);
     }
@@ -155,6 +193,8 @@ class SiteController extends Controller
         
         return $this->render('about');
     }
+    
+    
     
     
     
