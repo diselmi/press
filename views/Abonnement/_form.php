@@ -27,6 +27,10 @@ use kartik\date\DatePicker;
     ]) ?>
 
     <?= $form->field($model, 'vis_a_vis')->dropDownList($liste_admins) ?>
+    
+    <?= $form->field($model, 'acces_salles')->checkbox() ?>
+    
+    <?= $form->field($model, 'acces_journalistes')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn btn-primary']) ?>

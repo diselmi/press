@@ -13,6 +13,7 @@ use app\models\ContactForm;
 use app\models\User;
 use app\models\Nouveaute;
 use app\models\Privilege;
+use app\models\Temoignage;
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -21,6 +22,7 @@ use app\models\Contact;
 
 class SiteController extends Controller
 {
+    //public $layout = "main.php";
     /**
      * @inheritdoc
      */
@@ -73,26 +75,15 @@ class SiteController extends Controller
         //Yii::$app->user->switchIdentity(User::findIdentity(3));
         //var_dump(Yii::$app->user);
         //Yii::$app->end();
-        $privileges = Privilege::find();
+        
+        $privileges = Privilege::find()->all();
+        $temoignages = Temoignage::find()->all();
         
         return $this->render('index', [
-            'liste_nouv'    => $this->getListeNouv(),
+            'liste_nouv'    => Nouveaute::find()->galleryQuery(),
             'privileges'    => $privileges,
+            'temoignages'    => $temoignages,
         ]);
-    }
-    
-    public function getListeNouv()
-    {
-        $nouveautes = Nouveaute::find()->galleryQuery();
-        /*var_dump($nouveautes);
-        foreach ($nouveautes as &$nvt) {
-            $nvt["href"] = $nvt["poster"];
-            var_dump($nvt);
-        }*/
-        //$nouveautes = ArrayHelper::toArray($nouveautes, [])
-        //var_dump(json_encode($nouveautes));
-        //return json_encode($nouveautes);
-        return $nouveautes;
     }
 
     /**
@@ -102,13 +93,14 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        //$this->layout = "layout_admin";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(Url::toRoute("/dashboard"));
+            //return $this->goBack();
         }
         return $this->render('login', [
             'model' => $model,
@@ -143,9 +135,6 @@ class SiteController extends Controller
             if ($model->save()) {
                 //Yii::$app->session->setFlash('contactFormSubmitted');
                 return $this->redirect(Url::home());
-            }else {
-                var_dump($model->errors);
-                Yii::$app->end();
             }
         }
         
@@ -192,6 +181,25 @@ class SiteController extends Controller
         }
         
         return $this->render('about');
+    }
+    
+    /**
+     * redirect to Dashboard.
+     *
+     * @return string
+     */
+    public function actionDashboard()
+    {
+        $user = Yii::$app->user->identity;
+        if ($user->role0->nom == "client" || $user->role0->type == "client") {
+            $this->layout = "layout_client";
+            return $this->render('index_client');
+        }elseif ($user->role0->type == "admin") {
+            $this->layout = "layout_admin";
+            return $this->render('index_admin');
+        }else {
+            return $this->goHome();
+        }
     }
     
     

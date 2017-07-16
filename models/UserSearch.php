@@ -51,7 +51,7 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $type='', $sup = 0)
     {
         $query = User::find()->joinWith('role0');
         
@@ -88,6 +88,14 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'adresse', $this->adresse])
             ->andFilterWhere(['like', 'role.nom', $this->nom_role])
             ->andFilterWhere(['like', 'fonction.nom', $this->nom_fonction]);
+        if ($type == 'admin') {
+            $query->andFilterWhere(['=', 'role.type', 'admin']);
+        }
+        if ($type == 'client' && $sup) {
+            $query->andFilterWhere(['=', 'role.type', 'client']);
+            $query->andFilterWhere(['=', 'user.superieur', $sup]);
+            $query->orFilterWhere(['=', 'user.id', $sup]);
+        }
 
         return $dataProvider;
     }

@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "privilege".
  *
  * @property integer $id
- * @property string $auteur
  * @property string $titre
  * @property string $libelle_court
  * @property string $libelle_long
@@ -32,9 +31,9 @@ class Privilege extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['auteur', 'titre', 'libelle_court', 'libelle_long'], 'required'],
+            [['titre', 'libelle_court', 'libelle_long'], 'required'],
             [['cree_par'], 'integer'],
-            [['titre', 'auteur'], 'string', 'max' => 64],
+            [['titre'], 'string', 'max' => 64],
             [['libelle_court'], 'string', 'max' => 256],
             [['libelle_long'], 'string', 'max' => 500],
             [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
@@ -48,7 +47,6 @@ class Privilege extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'auteur' => Yii::t('app', 'Auteur'),
             'titre' => Yii::t('app', 'Titre'),
             'libelle_court' => Yii::t('app', 'Libelle Court'),
             'libelle_long' => Yii::t('app', 'Libelle Long'),

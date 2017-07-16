@@ -18,6 +18,7 @@ use app\models\Media;
  */
 class JournalisteController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

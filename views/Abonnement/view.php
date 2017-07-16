@@ -40,6 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => ucfirst(Yii::t("app", "vis a vis")),
                 'value' => ($model->vis_a_vis0->id).": ".$model->vis_a_vis0->nom." ".$model->vis_a_vis0->prenom,
             ],
+            
+        ],
+    ]) ?>
+    <h3> <?= ucfirst(Yii::t("app", "acces premium")) ?> </h3>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'acces_salles:boolean',
+            'acces_journalistes:boolean'
         ],
     ]) ?>
 

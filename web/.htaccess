@@ -5,6 +5,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Otherwise forward it to index.php
 RewriteRule . index.php
 
+Header set X-Robots-Tag "noindex, nofollow"
+
 # block bots from indexing
 RewriteCond %{HTTP_USER_AGENT} AltaVista [OR]
 RewriteCond %{HTTP_USER_AGENT} Googlebot [OR]
@@ -90,9 +92,9 @@ RewriteRule .* - [R=401,L]
 # end bots block
 
 # authentification
-AuthName "Page protégée, veuillez vous identifier"
-AuthType Basic
-AuthUserFile "C:\Dev\wamp\www\press\config\.htpasswd"
-Require valid-user
+# AuthName "Page protégée, veuillez vous identifier"
+# AuthType Basic
+# AuthUserFile "C:\Dev\wamp\www\press\config\.htpasswd"
+# Require valid-user
 
 #end authentification

@@ -19,6 +19,7 @@ use yii\helpers\FileHelper;
  */
 class SalleController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

@@ -18,6 +18,7 @@ use app\models\User;
  */
 class AbonnementController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

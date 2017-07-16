@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "temoignage".
  *
  * @property integer $id
+ * @property string $auteur
  * @property string $contenu
  * @property string $image
  */
@@ -32,7 +33,8 @@ class Temoignage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contenu'], 'required'],
+            [['auteur', 'contenu'], 'required'],
+            [['auteur'], 'string', 'max' => 64],
             [['contenu'], 'string', 'max' => 400],
             [['image'], 'string', 'max' => 256],
             [['fichier_image'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
@@ -47,6 +49,7 @@ class Temoignage extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'auteur' => Yii::t('app', 'Auteur'),
             'contenu' => Yii::t('app', 'Contenu'),
             'image' => Yii::t('app', 'Image'),
         ];

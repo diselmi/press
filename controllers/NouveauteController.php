@@ -17,6 +17,7 @@ use yii\web\UploadedFile;
  */
 class NouveauteController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

@@ -23,6 +23,7 @@ use Yii;
  * @property boolean $etre_notifie
  * @property boolean $etre_contacte
  * @property boolean $consulte
+ * @property datetime $envoye_le
  */
 class Contact extends \yii\db\ActiveRecord
 {
@@ -111,5 +112,13 @@ class Contact extends \yii\db\ActiveRecord
     public static function find()
     {
         return new ContactQuery(get_called_class());
+    }
+
+
+    public function beforeInsert() {
+        parent::beforeInsert();
+        $this->envoye_le = date("Y-m-d H:i:s");
+
+        return true;
     }
 }

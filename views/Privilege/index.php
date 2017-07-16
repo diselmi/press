@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'auteur',
             'titre',
             //'libelle_court',
             //'libelle_long',

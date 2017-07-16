@@ -20,6 +20,7 @@ use app\models\UserSearch;
  */
 class RoleController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

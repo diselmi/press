@@ -11,8 +11,6 @@ use yii\widgets\ActiveForm;
 <div class="privilege-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    
-    <?= $form->field($model, 'auteur')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'titre')->textInput(['maxlength' => true]) ?>
 

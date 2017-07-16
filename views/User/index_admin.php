@@ -47,16 +47,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]); 
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key],[
+                                'title' => Yii::t('yii', 'view')
+                            ]); 
                     },
                     'update' => function ($url, $model, $key) {
                         if ($model->role0->nom != "superadmin") {
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ["update", "id"=>$key]);
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ["update", "id"=>$key],[
+                                'title' => Yii::t('yii', 'update')
+                            ]);
                         }  
                     },
                     'delete' => function ($url, $model, $key) {
                         if ($model->role0->nom != "superadmin") {
-                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ["delete", "id"=>$key]);
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', ["delete", "id"=>$key],[
+                                'title' => Yii::t('yii', 'delete'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
+                                'data-method' => 'post',
+                            ]);
                         }  
                     },
                     'switch' => function ($url, $model, $key) {

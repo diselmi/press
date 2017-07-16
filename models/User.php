@@ -83,7 +83,25 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['imageLogo'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             //[['abonnement'], 'exist', 'skipOnError' => true, 'targetClass' => Abonnement::className(), 'targetAttribute' => ['client' => 'id']],
             [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
+            [['mail'], 'validateMail'],
         ];
+    }
+    
+    public function validateMail($attribute, $params, $validator)
+    {
+        //var_dump($this->attributes[$attribute]);
+        //Yii::$app->end();
+        if (Yii::$app->user->identity->role0->nom == "client" || Yii::$app->user->identity->role0->type == "client") {
+        
+            $client = Yii::$app->user->identity->superieur0;
+
+            $domaineClient = explode("@", $client->mail)[1];
+            $domaineUser = explode("@", $this->attributes[$attribute])[1];
+
+            if ($domaineClient != $domaineUser)
+                $this->addError($attribute, Yii::t("app", "domaine invalide")." : ".$domaineUser);
+
+        }    
     }
 
     /**
@@ -210,7 +228,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getSuperieur0()
     {
-        return $this->hasOne(User::className(), ['id' => 'superieur']);
+        if ($this->superieur) {
+            return $this->hasOne(User::className(), ['id' => 'superieur']);
+        }else {
+            return $this;
+        }
+        
     }
     
     /**
@@ -243,6 +266,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return new UserQuery(get_called_class());
     }
     
+    public static function getTeamOf($id = null)
+    {
+        $liste = [];
+        if ($id) {
+            $client = User::findOne(['id' => $id])->superieur0;
+            array_push($liste, $client);
+            array_combine($liste, User::findAll(["superieur" => $client->id]) );
+            //array_($liste, $client);
+        }
+        return $liste;
+    }
+    
     
     public function upload()
     {
@@ -259,7 +294,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->photo = "/".$cheminPhoto;
                 $this->offsetUnset('imagePhoto');
             }else {
-                $this->photo = "/images/profile_holder_m.jpg";
+                if ($this->photo == "") $this->photo = "/images/profile_holder_m.jpg";
             }
             if ($this->imageLogo) {
                 $cheminLogo = $chemin."/logo.".$this->imageLogo->extension;
@@ -267,7 +302,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 $this->logo = "/".$cheminLogo;
                 $this->offsetUnset('imageLogo');
             }else {
-                $this->logo = "/images/enterprise_holder.png";
+                if ($this->logo == "") $this->logo = "/images/enterprise_holder.png";
             }
             
             $this->offsetUnset('role_type');
@@ -320,16 +355,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         if ($id) {
             Yii::$app->user->switchIdentity(User::findIdentity($id));
         }
-    }
-    
-    
-    ////////////////////
-    // Autorisations
-    ////////////////////
-
-    
-    public function estCreateur($user_id, $model_name, $model_id){
-        return 1;
     }
 
 }

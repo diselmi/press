@@ -84,6 +84,7 @@ use kartik\file\FileInput;
                 'separator' => Yii::t("app", "to"),
                 'pluginOptions' => [
                     'todayHighlight' => true,
+                    'format' => 'dd-mm-yyyy'
                 ]
 
             ]); ?></div>

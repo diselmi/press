@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Inflector;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -22,6 +23,7 @@ $this->params['breadcrumbs'][] = $model->id;
     <div class="profile_title_admin">
         <h1><?= ucfirst(Html::encode($this->title)) ?></h1>
         <p>
+            <?= Html::a(Yii::t('app', 'Switch'), ['switch', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -44,7 +46,7 @@ $this->params['breadcrumbs'][] = $model->id;
             'prenom',
             'mail',
             'login',
-            'pass',
+            //'pass',
             [
                 'label' => 'lang',
                 'value' => $model->lang0->nom,

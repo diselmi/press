@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
  */
 class PrivilegeController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

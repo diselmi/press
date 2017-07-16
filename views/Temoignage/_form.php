@@ -14,6 +14,8 @@ use kartik\file\FileInput;
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
+    <?= $form->field($model, 'auteur')->textInput(['maxlength' => true]) ?>
+    
     <?= $form->field($model, 'image')->widget(FileInput::classname(), [
         'options' => ['accept' => 'image/*', 'multiple' => false],
         'pluginOptions' => [

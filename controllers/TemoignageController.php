@@ -16,6 +16,7 @@ use yii\web\UploadedFile;
  */
 class TemoignageController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

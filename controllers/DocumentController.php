@@ -16,6 +16,7 @@ use yii\helpers\Url;
  */
 class DocumentController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

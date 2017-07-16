@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class LangueController extends Controller
 {
+    public $layout = "layout_admin";
     /**
      * @inheritdoc
      */

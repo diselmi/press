@@ -11,6 +11,7 @@ use yii\captcha\Captcha;
 $this->title = Yii::t("app", 'Contact');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php $this->beginBlock('pageContent'); ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
     
@@ -32,29 +33,31 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
 
     <?php else: ?>
-        <?php if(isset($model->errors[0])) echo $model->errors[0]; ?>
-        <p>
-            <a href="/subscription">Click here</a> to ask for subscription.
-        </p>
 
         <div class="row">
-            <div class="col-lg-5">
+            <div class="col-md-offset-4 col-lg-4">
+                <br>
+                <?php if(isset($model->errors[0])) echo $model->errors[0]; ?>
+                <p>
+                    <a href="/subscription">Click here</a> to ask for subscription.
+                </p>
+                <br>
 
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
                     <?= $form->field($model, 'rs')->textInput(['autofocus' => true]) ?>
 
-                    <?= $form->field($model, 'nom') ?>
+                    <?= $form->field($model, 'nom')->textInput() ?>
 
-                    <?= $form->field($model, 'prenom') ?>
+                    <?= $form->field($model, 'prenom')->textInput() ?>
                 
-                    <?= $form->field($model, 'email') ?>
+                    <?= $form->field($model, 'email')->input('email') ?>
                 
-                    <?= $form->field($model, 'numtel') ?>
+                    <?= $form->field($model, 'numtel')->textInput() ?>
                 
-                    <?= $form->field($model, 'adresse') ?>
+                    <?= $form->field($model, 'adresse')->textInput() ?>
 
-                    <?= $form->field($model, 'objet') ?>
+                    <?= $form->field($model, 'objet')->textInput() ?>
 
                     <?= $form->field($model, 'contenu')->textarea(['rows' => 6]) ?>
 
@@ -72,3 +75,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php endif; ?>
 </div>
+<?php $this->endBlock(); ?>

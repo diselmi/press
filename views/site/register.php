@@ -13,12 +13,13 @@ use app\models\Contact;
 $this->title = Yii::t("app", 'Register');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php $this->beginBlock('pageContent'); ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
     
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-md-offset-4 col-lg-4">
 
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
@@ -55,3 +56,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php $this->endBlock(); ?>
