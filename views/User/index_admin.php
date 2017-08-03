@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'switch' => function ($url, $model, $key) {
                         $cUser = Yii::$app->user;
-                        if ($cUser->id != $key) {
+                        if ($cUser->id != $key && $model->role0->nom !="superadmin") {
                             return Html::a('<span class="glyphicon glyphicon-refresh"></span>', ["switch", "id"=>$key]);
                         }  
                     },

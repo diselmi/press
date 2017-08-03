@@ -31,6 +31,13 @@ class TemoignageController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+    }
 
     /**
      * Lists all Temoignage models.
@@ -38,6 +45,7 @@ class TemoignageController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkAutorisation('site_gerer');
         $searchModel = new TemoignageSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -54,6 +62,7 @@ class TemoignageController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('site_gerer');
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -66,6 +75,7 @@ class TemoignageController extends Controller
      */
     public function actionCreate()
     {
+        $this->checkAutorisation('site_gerer');
         $model = new Temoignage();
         
         $model->fichier_image = UploadedFile::getInstance($model, 'image');
@@ -91,6 +101,7 @@ class TemoignageController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkAutorisation('site_gerer');
         $model = $this->findModel($id);
         
         $model->fichier_image = UploadedFile::getInstance($model, 'image');
@@ -116,6 +127,7 @@ class TemoignageController extends Controller
      */
     public function actionDelete($id)
     {
+        $this->checkAutorisation('site_gerer');
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

@@ -7,10 +7,15 @@ use app\models\Media;
 use app\models\MediaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use yii\base\Exception;
 use yii\filters\VerbFilter;
 
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
+
+use yii\helpers\ArrayHelper;
+use app\models\User;
 
 /**
  * MediaController implements the CRUD actions for Media model.
@@ -32,6 +37,40 @@ class MediaController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+        if ($cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }  
+    }
+    
+    public function checkClientAutorisation($permission, $model = null)
+    {
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if ($cUser->role0->nom != "client" && $cUser->role0->type != "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if (!$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        
+        if ($model) {
+            $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            if (!in_array($model->cree_par, $liste) ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+            }
+        }
+        
+        $this->layout = "layout_client";
+        
+    }
 
     /**
      * Lists all Media models.
@@ -39,6 +78,13 @@ class MediaController extends Controller
      */
     public function actionIndex()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $searchModel = new MediaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -55,6 +101,13 @@ class MediaController extends Controller
      */
     public function actionView($id)
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,10 +120,18 @@ class MediaController extends Controller
      */
     public function actionCreate()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $model = new Media();
 
         if ($model->load(Yii::$app->request->post()) ) {
             $model->fichier_logo = UploadedFile::getInstance($model, 'fichier_logo');
+            $model->cree_par = Yii::$app->user->id;
             if ($model->save() && $model->upload()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -90,7 +151,13 @@ class MediaController extends Controller
      */
     public function actionUpdate($id)
     {
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
         
         if ($model->load(Yii::$app->request->post()) ) {
             $model->fichier_logo = UploadedFile::getInstance($model, 'fichier_logo');
@@ -113,7 +180,15 @@ class MediaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $cUser = Yii::$app->user->identity;
+        $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
+        
+        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -136,6 +211,7 @@ class MediaController extends Controller
     
     public function actionPrValues($id = null, $pr_value = 0)
     {
+        $this->checkAutorisation('prestataire_gerer');
         /*$query = Media::find()->orderBy('type');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

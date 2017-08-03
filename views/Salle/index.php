@@ -3,12 +3,25 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
+
+use app\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SalleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Salles');
 $this->params['breadcrumbs'][] = $this->title;
+
+$cUser = Yii::$app->user->identity;
+$cc = false;
+$liste = [];
+if ($cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+    $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+    $cc = true;
+}
+
+
 ?>
 <div class="salle-index">
 
@@ -38,7 +51,23 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'vis_a_vis',
             // 'cree_par',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'visibleButtons' => [
+                    'update' => function ($model_s, $key, $index) use ($liste, $cc) {
+                        if ($cc) {
+                            return in_array($model_s->cree_par, $liste)  ? true : false;
+                        }
+                        
+                    },
+                    'delete' => function ($model_s, $key, $index) use ($liste, $cc) {
+                        if ($cc) {
+                            return in_array($model_s->cree_par, $liste)  ? true : false;
+                        }
+                    },
+                ]
+            
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

@@ -27,19 +27,19 @@ AppAsset::register($this);
     <meta name="author" content="">
 
     <!-- Bootstrap Css -->
-    <link href="bootstrap-assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap-assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Style -->
     <?php $this->head() ?>
-    <link href="plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
-    <link href="plugins/owl-carousel/owl.theme.css" rel="stylesheet">
-    <link href="plugins/owl-carousel/owl.transitions.css" rel="stylesheet">
-    <link href="plugins/Lightbox/dist/css/lightbox.css" rel="stylesheet">
-    <link href="plugins/Icons/et-line-font/style.css" rel="stylesheet">
-    <link href="plugins/animate.css/animate.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
+    <link href="/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
+    <link href="/plugins/owl-carousel/owl.transitions.css" rel="stylesheet">
+    <link href="/plugins/Lightbox/dist/css/lightbox.css" rel="stylesheet">
+    <link href="/plugins/Icons/et-line-font/style.css" rel="stylesheet">
+    <link href="/plugins/animate.css/animate.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
     <!-- Icons Font -->
-    <link rel="stylesheet" href="css/font-awesome4.4.0.min.css">
+    <link rel="stylesheet" href="/css/font-awesome4.4.0.min.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -68,7 +68,7 @@ AppAsset::register($this);
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"><img src="img/logo/logo.png" class="img-responsive" alt="logo"></a>
+                    <a class="navbar-brand" href="/"><img src="/img/logo/logo.png" class="img-responsive" alt="logo"></a>
                 </div>
                 <div class="collapse navbar-collapse text-center" id="bs-example-navbar-collapse-1">
                     <div class="col-md-8 col-xs-12 nav-wrap">
@@ -146,7 +146,7 @@ AppAsset::register($this);
 	============================================= -->
     <footer>
         <div class="container">
-            <h1>PR Application</h1>
+            <h1 style="font-size: 50px;">MY.PR Application</h1>
             <div class="social">
                 <a href="#"><i class="fa fa-facebook fa-2x"></i></a>
                 <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
@@ -157,18 +157,18 @@ AppAsset::register($this);
     </footer>
     <?php $this->endBody() ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="js/jquery1.11.3.min.js"></script>
+    <script src="/js/jquery1.11.3.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap-assets/js/bootstrap.min.js"></script>
-    <script src="js/custom.js"></script>
+    <script src="/bootstrap-assets/js/bootstrap.min.js"></script>
+    <script src="/js/custom.js"></script>
     <!-- JS PLUGINS -->
-    <script src="plugins/owl-carousel/owl.carousel.min.js"></script>
-    <script src="js/jquery.easing.min.js"></script>
-    <script src="plugins/waypoints/jquery.waypoints.min.js"></script>
-    <script src="plugins/countTo/jquery.countTo.js"></script>
-    <script src="plugins/inview/jquery.inview.min.js"></script>
-    <script src="plugins/Lightbox/dist/js/lightbox.min.js"></script>
-    <script src="plugins/WOW/dist/wow.min.js"></script>
+    <script src="/plugins/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/js/jquery.easing.min.js"></script>
+    <script src="/plugins/waypoints/jquery.waypoints.min.js"></script>
+    <script src="/plugins/countTo/jquery.countTo.js"></script>
+    <script src="/plugins/inview/jquery.inview.min.js"></script>
+    <script src="/plugins/Lightbox/dist/js/lightbox.min.js"></script>
+    <script src="/plugins/WOW/dist/wow.min.js"></script>
     <!-- GOOGLE MAP -->
     <!--<script src="https://maps.googleapis.com/maps/api/js"></script> -->
     

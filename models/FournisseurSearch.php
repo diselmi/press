@@ -18,7 +18,7 @@ class FournisseurSearch extends Fournisseur
     public function rules()
     {
         return [
-            [['id', 'gallery_photos', 'gallery_pdf'], 'integer'],
+            [['id', 'gallery_photos', 'gallery_pdf', 'cree_par'], 'integer'],
             [['estPremium'], 'boolean'],
             [['nom', 'adresse', 'numtel', 'activite', 'siteweb', 'facebook', 'twitter'], 'safe'],
         ];
@@ -45,7 +45,8 @@ class FournisseurSearch extends Fournisseur
         $query = Fournisseur::find();
 
         // add conditions that should always apply here
-
+        //$this->addClientConditions($query);
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -75,5 +76,21 @@ class FournisseurSearch extends Fournisseur
             ->andFilterWhere(['like', 'twitter', $this->twitter]);
 
         return $dataProvider;
+    }
+    
+    public function addClientConditions($query)
+    {
+        if (!Yii::$app->user->isGuest && $cUser = Yii::$app->user->identity ) {
+            $premium = 0;
+            if ($abonnement = Abonnement::findOne(['client'=>$cUser->superieur0->id])) {
+                $premium = $abonnement->acces_salles? [0,1] : 0;
+            }
+            $liste_employes = \yii\helpers\ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            $liste_admins = \yii\helpers\ArrayHelper::getColumn(User::find()->adminsNoClients()->all(), "id");
+            $query->andWhere('false');
+            $query->orWhere(['cree_par'=>$liste_employes]);
+            $query->orWhere([ 'and' ,  ['est_premium'=>$premium]  ,  ['cree_par'=>$liste_admins]  ]);
+        }
+        
     }
 }

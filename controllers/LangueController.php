@@ -29,6 +29,13 @@ class LangueController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+    }
 
     /**
      * Lists all Langue models.
@@ -36,6 +43,7 @@ class LangueController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkAutorisation('site_gerer');
         $searchModel = new LangueSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -52,6 +60,7 @@ class LangueController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('site_gerer');
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -64,6 +73,7 @@ class LangueController extends Controller
      */
     public function actionCreate()
     {
+        $this->checkAutorisation('site_gerer');
         $model = new Langue();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -83,6 +93,7 @@ class LangueController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkAutorisation('site_gerer');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -102,6 +113,7 @@ class LangueController extends Controller
      */
     public function actionDelete($id)
     {
+        $this->checkAutorisation('site_gerer');
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

@@ -51,7 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model->role0,
         'attributes' => [
             'user_gerer:boolean',
-            'role_gerer:boolean',
+            'prestataire_gerer:boolean',
+            'site_gerer:boolean',
+            'contact_gerer:boolean',
         ],
     ]) ?>
     

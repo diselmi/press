@@ -75,4 +75,101 @@ table .glyphicon {
     max-width: 150px;
 }
 
+a.disabled {
+    /* Make the disabled links grayish*/
+    color: #777 !important;
+    /* And disable the pointer events */
+    pointer-events: none;
+}
+.sidebar-menu>li:hover>a.disabled {
+    border-left: 3px solid #777 !important;
+    /*border-left-color: #777 !important;*/
+    pointer-events: none;
+}
 
+/* admin lte */
+.users-list>li {
+    width: 150px !important;
+    height: 150px !important;
+    margin: 20px !important;
+}
+.users-list>li img {
+    border-radius: 0 !important;
+}
+.chat_img_cont {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+}
+
+/* chat */
+.chat .item-from-me>.message-from-me {
+    /*display: inline-block;*/
+    margin-right: 55px;
+    margin-top: -40px;
+    text-align: right;
+}
+.item-from-me {
+    /*direction: rtl;*/
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.chat .item-from-me>.offline {
+    border: 2px solid #dd4b39;
+}
+
+.item img, .item-from-me img {
+    width: 60px !important;
+    height: 60px !important;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    border: 2px solid #dd4b39;
+}
+
+.item-from-me img {
+   border: 2px solid #605ca8 !important; 
+}
+
+.contenu-msg {
+    font-size: 16px;
+}
+
+
+.chat .message  {
+    margin-left: 80px !important;
+    margin-top: -60px !important;
+}
+
+.chat .message-from-me  {
+    margin-right: 80px !important;
+    margin-top: -60px !important;
+}
+
+.chat .name {
+    /*display: table !important;*/
+    font-weight: 600;
+}
+
+.chat .item-from-me>.message-from-me .date-from-me {
+    direction: ltr;
+}
+
+.chat .attachement-from-me {
+    border-radius: 3px;
+    background: #f4f4f4;
+    margin-top: 10px;
+    margin-right: 65px;
+    margin-left: 65px;
+    padding: 10px;
+}
+
+.chat .filename {
+    font-weight: 600;
+    font-size: 13px;
+    font-style: italic;
+    display: inline-block;
+}

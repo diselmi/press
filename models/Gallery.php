@@ -116,8 +116,8 @@ class Gallery extends \yii\db\ActiveRecord
                 //$doc->type = $fichier->type;
                 $doc->gallery = $this->id;
                 if (!(  $doc->upload($chemin)  )) {
-                    var_dump($doc);
-                    Yii::$app->end();
+                    //var_dump($doc);
+                    //Yii::$app->end();
                     return false;
                 }
             }else {

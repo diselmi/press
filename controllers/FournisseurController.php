@@ -14,6 +14,9 @@ use app\models\Gallery;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
+use yii\helpers\ArrayHelper;
+use app\models\User;
+
 /**
  * FournisseurController implements the CRUD actions for Fournisseur model.
  */
@@ -34,6 +37,40 @@ class FournisseurController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+        if ($cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        } 
+    }
+    
+    public function checkClientAutorisation($permission, $model = null)
+    {
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if ($cUser->role0->nom != "client" && $cUser->role0->type != "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if (!$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        
+        if ($model) {
+            $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            if (!in_array($model->cree_par, $liste) ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+            }
+        }
+        
+        $this->layout = "layout_client";
+        
+    }
 
     /**
      * Lists all Fournisseur models.
@@ -41,6 +78,13 @@ class FournisseurController extends Controller
      */
     public function actionIndex()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $searchModel = new FournisseurSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -57,10 +101,16 @@ class FournisseurController extends Controller
      */
     public function actionView($id)
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
         $model = $this->findModel($id);
         $ch_f = "/uploads/fournisseurs/".$model->dossier;
-        $liste_photos = Gallery::find()->DocsByGallery($model->gallery_photos, $ch_f."/photos");
-        $liste_pdf = Gallery::find()->DocsByGallery($model->gallery_pdf, $ch_f."/docs");
+        $liste_photos = $model->gallery_photos ? Gallery::find()->DocsByGallery($model->gallery_photos, $ch_f."/photos") : null;
+        $liste_pdf = $model->gallery_pdf ? Gallery::find()->DocsByGallery($model->gallery_pdf, $ch_f."/docs") : null;
         
         
         return $this->render('view', [
@@ -77,6 +127,12 @@ class FournisseurController extends Controller
      */
     public function actionCreate()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
         $model = new Fournisseur();
         
         $gallery_photos = new Gallery();
@@ -90,10 +146,10 @@ class FournisseurController extends Controller
             //var_dump($gallery_photos->fichiers);
             //Yii::$app->end();
             $model->dossier = substr(md5(date("yyyy m d h:i:s")), 0, 15);
-            
+            $model->cree_par = Yii::$app->user->id;
             //$f = substr(md5(date("yyyy m d h:i:s")), 0, 15);
-            $chemin_photos = "uploads/fournisseurs/".$model->dossier."/photos/";
-            $chemin_pdf = "uploads/fournisseurs/".$model->dossier."/docs/";
+            $chemin_photos = "/uploads/fournisseurs/".$model->dossier."/photos/";
+            $chemin_pdf = "/uploads/fournisseurs/".$model->dossier."/docs/";
             
             $db = Yii::$app->db; $transaction = $db->beginTransaction();  
             if ( $gallery_photos->fichiers && !( $gallery_photos->save() && $gallery_photos->upload($chemin_photos, ["image", "video"] )  )) {
@@ -129,7 +185,13 @@ class FournisseurController extends Controller
      */
     public function actionUpdate($id)
     {
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
         
 
         if ($model->load(Yii::$app->request->post())) {
@@ -186,7 +248,14 @@ class FournisseurController extends Controller
      */
     public function actionDelete($id)
     {
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
+        
         if ($model) {
             if ($model->galleryPhotos) {
                 $gallery_photos = Gallery::find(['id' => $model->galleryPhotos->id])->one();

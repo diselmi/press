@@ -40,7 +40,7 @@ use kartik\file\FileInput;
     <?php    if ( !$model->isNewRecord) { ?>
 
         <?= $form->field($model, 'login')->textInput() ?>
-        <?= $form->field($model, 'pass')->textInput() ?>
+        <?php //echo $form->field($model, 'pass')->textInput() ?>
 
     <?php } ?>
     

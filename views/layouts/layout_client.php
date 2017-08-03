@@ -2,6 +2,9 @@
     use yii\helpers\Html;
     use app\assets\AppAsset;
     use yii\widgets\Breadcrumbs;
+    use yii\bootstrap\Alert;
+    
+    use app\models\Message;
     
     
     AppAsset::register($this);
@@ -16,7 +19,7 @@
 <head>
   <meta charset="<?= Yii::$app->charset ?>">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Admin | <?= Html::encode($this->title) ?></title>
+  <title>Admin Entreprise | <?= Html::encode($this->title) ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <?= Html::csrfMetaTags() ?>
@@ -48,9 +51,11 @@
     <!-- Logo -->
     <a href="/" class="logo" style="background-color: <?= $couleur2 ?> !important ;">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>PR</b>.C</span>
+      <!--<span class="logo-mini"><b>PR</b>.C</span>-->
+      <span class="logo-mini"><img style="max-width: 35px; max-height: 35px;" src="/img/logo/logo.png"></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>PR</b>.CLIENT</span>
+      
+      <span class="logo-lg"><b>MY</b> <img style="max-width: 35px; max-height: 35px;" src="/img/logo/logo.png"> <b>PR</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" style="background-color: <?= $couleur1 ?> !important ;">
@@ -64,6 +69,40 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          <li class="dropdown messages-menu text-red">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <?php
+                $totalMessagesNonLus = sizeof(Message::find()->messagesNonLus());
+              ?>
+              <span class="label label-danger"><?= $totalMessagesNonLus ?></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="header"><?= "<b>".$totalMessagesNonLus."</b> ".Yii::t("app", "messages non lus") ?></li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                  
+                    <?php foreach (Message::find()->messagesNonLus() as $message) { ?>
+                    <li><!-- start message -->
+                        <a href="/chat/index">
+                            <div class="pull-left">
+                                <img src=<?= $message->expediteur0->photo ?> class="img-circle" alt="User Image">
+                            </div>
+                            <h4>
+                                <?= $message->expediteur0->prenom." ".$message->expediteur0->nom ?>
+                            </h4>
+                            <p><?= $message->texte=="." ? Yii::t("app", "document"): $message->texte ?></p>
+                        </a>
+                    </li>        
+
+                    <?php } ?>
+                  
+                </ul><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+              </li>
+              <li class="footer"><a href="/chat/index"><?= Yii::t("app", "consulter tous les messages") ?></a></li>
+            </ul>
+          </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="/user/profile" class="dropdown-toggle" data-toggle="dropdown">
@@ -125,26 +164,86 @@
           
         <!--------------------------------->
         <li class="header"><span><i class="fa fa-user"></i></span> <?= ucfirst(Yii::t("app", "comptes")) ?></li>
-      
+        
+        <?php
+            $disabled="";
+            if (!Yii::$app->user->identity->role0->attributes['user_gerer']) { $disabled="disabled";  }
+        ?>
         <li class="treeview">
-          <a href="/user/c-index">
+          <a href="/user/c-index" class="<?= $disabled ?>">
             <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
             <span><?= ucfirst(Yii::t("app", "utilisateurs")) ?></span>   
           </a>
         </li>
-
+        
+        <!--------------------------------->
+        <li class="header"><span><i class="fa fa-calendar"></i></span> <?= ucfirst(Yii::t("app", "evenements")) ?></li>
+        
+        <?php
+            $disabled="";
+            if (!Yii::$app->user->identity->role0->attributes['evenement_gerer']) { $disabled="disabled";  }
+        ?>
+        <li class="treeview">
+          <a href="/publication/" class="<?= $disabled ?>">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "publications")) ?></span>   
+          </a>
+        </li>
+        
+        <!--------------------------------->
+        <li class="header"><span><i class="fa fa-calendar"></i></span> <?= ucfirst(Yii::t("app", "prestataires")) ?></li>
+        
+        <?php
+            $disabled="";
+            if (!Yii::$app->user->identity->role0->attributes['prestataire_gerer']) { $disabled="disabled";  }
+        ?>
+        <li class="treeview">
+          <a href="/media/index" class="<?= $disabled ?>">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "media")) ?></span>   
+          </a>
+        </li>
+        
+        <li class="treeview">
+          <a href="/journaliste/index" class="<?= $disabled ?>">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "journalistes")) ?></span>   
+          </a>
+        </li>
+        
+        <li class="treeview">
+          <a href="/fournisseur/index" class="<?= $disabled ?>">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "fournisseurs")) ?></span>   
+          </a>
+        </li>
+        
+        <!--------------------------------->
+        <li class="header"><span><i class="fa fa-users"></i></span> <?= ucfirst(Yii::t("app", "publique")) ?></li>
+        
+        <li class="treeview">
+          <a href="/site/share">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "partager")) ?></span> 
+          </a>
         </li>
         
         <!--------------------------------->
         <li class="header"><?= ucfirst(Yii::t("app", "autres")) ?></li>
         
         <li class="treeview">
-          <a href="/salle/c-index">
+          <a href="/salle/index">
             <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
             <span><?= ucfirst(Yii::t("app", "salles")) ?></span> 
           </a>
         </li>      
         
+        <li class="treeview">
+          <a href="/chat/c-index">
+            <span class="pull-right-container"> <i class="fa fa-angle-right pull-right"></i> </span>
+            <span><?= ucfirst(Yii::t("app", "chat")) ?></span> 
+          </a>
+        </li>
         <!--------------------------------->
       </ul>
     </section>
@@ -161,6 +260,28 @@
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
     </section>
+    
+    <div class="col-md-offset-3 col-md-6">
+    <?php
+        if (Yii::$app->session->hasFlash("success")) {
+            echo Alert::widget([
+                'options' => [
+                    'class' => 'alert-success',
+                ],
+                'body' => "<i class='icon fa fa-check'></i> ".Yii::$app->session->getFlash("success"),
+            ]);
+        }
+        if (Yii::$app->session->hasFlash("error")) {
+            echo Alert::widget([
+                'options' => [
+                    'class' => 'alert-danger',
+                ],
+                'body' => "<i class='icon fa fa-ban'></i> ".Yii::$app->session->getFlash("error"),
+            ]);
+        }  
+    ?>
+    </div>
+    
 
     <!-- Main content -->
     <section class="content">
@@ -181,19 +302,18 @@
 
 </div>
 <!-- ./wrapper -->
-<?php $this->endBody() ?>
 <!-- jQuery 2.2.3 -->
-<!--<script src="/lte/jquery-2.2.3.min.js"></script>-->
+<script src="/lte/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<!--<script src="lte/bootstrap.min.js"></script>-->
+<script src="/lte/bootstrap.min.js"></script>
+<?php $this->endBody() ?>
+
 <!-- SlimScroll -->
 <script src="/lte/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="/lte/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="/lte/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="/lte/demo.js"></script>
 </body>
 </html>
 <?php $this->endPage() ?>

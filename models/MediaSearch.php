@@ -18,7 +18,7 @@ class MediaSearch extends Media
     public function rules()
     {
         return [
-            [['id', 'pr_value'], 'integer'],
+            [['id', 'pr_value', 'cree_par'], 'integer'],
             [['tv', 'radio', 'j_papier', 'j_electronique'], 'boolean'],
             [['nom', 'adresse', 'mail', 'numtel', 'logo', 'siteweb', 'facebook', 'twitter', 'date_creation'], 'safe'],
         ];
@@ -46,7 +46,9 @@ class MediaSearch extends Media
         $query = Media::find();
 
         // add conditions that should always apply here
-
+        //$this->addClientConditions($query);
+        
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -85,5 +87,21 @@ class MediaSearch extends Media
             ->andFilterWhere(['like', 'date_creation', $this->date_creation]);
 
         return $dataProvider;
+    }
+    
+    public function addClientConditions($query)
+    {
+        if (!Yii::$app->user->isGuest && $cUser = Yii::$app->user->identity ) {
+            $premium = 0;
+            if ($abonnement = Abonnement::findOne(['client'=>$cUser->superieur0->id])) {
+                $premium = $abonnement->acces_salles? [0,1] : 0;
+            }
+            $liste_employes = \yii\helpers\ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            $liste_admins = \yii\helpers\ArrayHelper::getColumn(User::find()->adminsNoClients()->all(), "id");
+            $query->andWhere('false');
+            $query->orWhere(['cree_par'=>$liste_employes]);
+            $query->orWhere([ 'and' ,  ['est_premium'=>$premium]  ,  ['cree_par'=>$liste_admins]  ]);
+        }
+        
     }
 }

@@ -99,7 +99,7 @@ class Nouveaute extends \yii\db\ActiveRecord
         $chemin = "uploads/nouveaute-files/";
 
         if ( ! is_dir($chemin)) {
-            mkdir($chemin);
+            mkdir($chemin, 0777, true);
         }
         if ($this->fichier_image) {
             //$chemin = "uploads/".$user_mail."/files/".$this->fichier->baseName;

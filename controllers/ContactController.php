@@ -29,6 +29,13 @@ class ContactController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+    }
 
     /**
      * Lists all Contact models.
@@ -36,6 +43,7 @@ class ContactController extends Controller
      */
     public function actionIndexContacts()
     {
+        $this->checkAutorisation('contact_gerer');
         $searchModel = new ContactSearch(2);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
@@ -51,6 +59,7 @@ class ContactController extends Controller
      */
     public function actionIndexDemandes()
     {
+        $this->checkAutorisation('contact_gerer');
         $searchModel = new ContactSearch(3);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
@@ -67,6 +76,7 @@ class ContactController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('contact_gerer');
         $model = $this->findModel($id);
         $model->consulte = true; $model->save(false);
         $page = "view_contact";
@@ -96,6 +106,7 @@ class ContactController extends Controller
      */
     public function actionDelete($id)
     {
+        $this->checkAutorisation('contact_gerer');
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

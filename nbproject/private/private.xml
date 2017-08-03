@@ -7,59 +7,53 @@
             <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
         </group>
         <group name="www">
-            <file>file:/C:/Dev/wamp/www/press/models/Contact.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/JournalisteController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/RoleController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Privilege/view.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/SiteController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/PrivilegeSearch.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Privilege/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/FournisseurController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/LoginForm.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Contact/index_demande.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/layouts/layout_client.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/SalleController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/layouts/layout_admin.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Media/_form.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/Fournisseur.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Role/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/register.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Privilege/_form.php</file>
-            <file>file:/C:/Dev/wamp/www/press/config/.htpasswd</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Contact/view_demande.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/ContactForm.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/UserController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/MediaController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Media/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Temoignage/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/Temoignage.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/index.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/about.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Fournisseur/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/view_admin.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Role/view.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/site/index_admin.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Abonnement/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/view.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Role/affecter.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_profile_edit.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/RoleSearch.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/JournalisteController.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/FonctionController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/layouts/main_old.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_c_profile_edit.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/AbonnementController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/RoleController.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/TemoignageController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Contact/view_contact.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/ContactSearch.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Contact/index_contact.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Temoignage/_form.php</file>
-            <file>file:/C:/Dev/wamp/www/press/web/.htaccess</file>
+            <file>file:/C:/Dev/wamp/www/press/models/RoleQuery.php</file>
+            <file>file:/C:/Dev/wamp/www/press/web/js/role_type_change.js</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/SiteController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/web/js/perso.js</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Role/_search.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/FournisseurController.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/site/index_client.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/DocumentController.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/LangueController.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/contact_old.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/ContactController.php</file>
             <file>file:/C:/Dev/wamp/www/press/controllers/NouveauteController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/update.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/layouts/layout_client.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/c_view.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/layouts/layout_admin.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/c_update.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/User/index_admin.php</file>
-            <file>file:/C:/Dev/wamp/www/press/models/Privilege.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/contact.php</file>
-            <file>file:/C:/Dev/wamp/www/press/web/robots.txt</file>
-            <file>file:/C:/Dev/wamp/www/press/views/site/login.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/PrivilegeController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/Fournisseur.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Role/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/Journaliste/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/c_index.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/User.php</file>
+            <file>file:/C:/Dev/wamp/www/press/web/js/media_add.js</file>
+            <file>file:/C:/Dev/wamp/www/press/models/UserSearch.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/c_create.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_c_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/UserController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/controllers/MediaController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/create.php</file>
+            <file>file:/C:/Dev/wamp/www/press/views/User/_form.php</file>
+            <file>file:/C:/Dev/wamp/www/press/models/Role.php</file>
             <file>file:/C:/Dev/wamp/www/press/views/layouts/main.php</file>
-            <file>file:/C:/Dev/wamp/www/press/views/Temoignage/view.php</file>
-            <file>file:/C:/Dev/wamp/www/press/controllers/AdminController.php</file>
+            <file>file:/C:/Dev/wamp/www/press/web/css/perso.css</file>
         </group>
     </open-files>
 </project-private>

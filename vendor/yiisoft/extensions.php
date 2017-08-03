@@ -401,4 +401,22 @@ return array (
       '@dosamigos/gallery' => $vendorDir . '/2amigos/yii2-gallery-widget/src',
     ),
   ),
+  '2amigos/yii2-ckeditor-widget' => 
+  array (
+    'name' => '2amigos/yii2-ckeditor-widget',
+    'version' => '2.1.0.0',
+    'alias' => 
+    array (
+      '@dosamigos/ckeditor' => $vendorDir . '/2amigos/yii2-ckeditor-widget/src',
+    ),
+  ),
+  '2amigos/yii2-qrcode-helper' => 
+  array (
+    'name' => '2amigos/yii2-qrcode-helper',
+    'version' => '1.0.3.0',
+    'alias' => 
+    array (
+      '@dosamigos/qrcode' => $vendorDir . '/2amigos/yii2-qrcode-helper/src',
+    ),
+  ),
 );

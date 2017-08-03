@@ -35,7 +35,7 @@ class UserQuery extends \yii\db\ActiveQuery
     public function onlyClients($db = null)
     {
         $query = $this->joinWith('role0');
-        $query->andWhere(['=', 'type', 'client']);
+        $query->andWhere(['=', 'nom', 'client']);
         return $query;
     }
     
@@ -43,6 +43,25 @@ class UserQuery extends \yii\db\ActiveQuery
     {
         $query = $this->joinWith('role0');
         $query->andWhere(['=', 'type', 'admin']);
+        return $query;
+    }
+    
+    public function adminsNoClients($db = null)
+    {
+        $query = $this->joinWith('role0');
+        $query->andWhere(['=', 'role.type', 'admin']);
+        $query->andWhere(['not',['role.nom' => 'client'] ]);
+        return $query;
+    }
+
+    
+    public function employeesOf($cId)
+    {
+        $query = $this->joinWith('role0');
+        $query->where(['=', 'user.id', $cId]);
+        $query->orWhere(['and', " role.type='client' ", "user.superieur=$cId"]);
+        //$query->orWhere(['=', 'user.superieur', $cId]);
+        
         return $query;
     }
    

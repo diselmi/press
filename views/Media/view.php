@@ -4,9 +4,22 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 use app\models\Media;
-
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use app\models\User;
 /* @var $this yii\web\View */
 /* @var $model app\models\Media */
+
+$cUser = Yii::$app->user->identity;
+$afficher = true;
+$liste = [];
+if ($cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+    $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+    if (!in_array($model->cree_par, $liste) ) {
+        $afficher = false;
+    }
+}
+
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Media'), 'url' => ['index']];
@@ -15,14 +28,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="media-view">
 
     <div class="profile_picture_admin">
-        <?= Html::img($model->logo) ?>
+        <?php if ($model->logo){
+            echo Html::img($model->logo);
+        }else {
+            echo Html::img(Url::to("/images/media-photo.png"));
+        } ?>
     </div>
     
     <div class="profile_title_admin">
         <h1><?= Html::encode($model->id.": ".$model->nom) ?></h1>
         <p>
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+            <?php
+            if($afficher) echo Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+            if($afficher) echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -56,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'facebook',
             'twitter',
             'date_creation',
+            'pr_value',
         ],
     ]) ?>
     

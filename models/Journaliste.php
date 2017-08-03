@@ -15,8 +15,10 @@ use Yii;
  * @property string $siteweb
  * @property string $facebook
  * @property string $twitter
- * @property string theme
- *
+ * @property string $theme
+ * @property integer $cree_par
+ * 
+ * @property User $creePar
  * @property JournalisteMedia[] $journalisteMedia
  * @property Media[] $medias
  */
@@ -40,6 +42,7 @@ class Journaliste extends \yii\db\ActiveRecord
     
     public static function allThemes()
     {
+        //return Journaliste::$themes;
         return array_combine(Journaliste::$themes, Journaliste::$themes);
     }
 
@@ -58,6 +61,7 @@ class Journaliste extends \yii\db\ActiveRecord
             ['facebook', 'validateFacebook'],
             ['twitter', 'validateTwitter'],
             ['numtel', 'validatePhone'],
+            [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
         ];
     }
     
@@ -95,9 +99,18 @@ class Journaliste extends \yii\db\ActiveRecord
             'facebook' => Yii::t('app', 'Facebook'),
             'twitter' => Yii::t('app', 'Twitter'),
             'theme' => Yii::t('app', 'Theme'),
+            'cree_par' => Yii::t('app', 'Cree Par'),
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreePar()
+    {
+        return $this->hasOne(User::className(), ['id' => 'cree_par']);
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */

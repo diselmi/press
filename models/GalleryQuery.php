@@ -43,8 +43,8 @@ class GalleryQuery extends \yii\db\ActiveQuery
         )->queryAll();
         
         foreach ($docs as &$doc) {
-            $doc["src"] = $ch."/".$doc["src"];
-            $doc["url"] = $ch."/".$doc["url"];
+            $doc["src"] = "/".$doc["src"];
+            $doc["url"] = "/".$doc["url"];
             if ($doc["type"] == "application/pdf") {
                 $doc["src"] = "/images/profile_holder_m.jpg";
             }

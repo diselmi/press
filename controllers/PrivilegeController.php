@@ -32,11 +32,9 @@ class PrivilegeController extends Controller
         ];
     }
     
-    public function checkAutorisation($permission, $id=null){
-        $cUser = Yii::$app->user->identity;
-        if ($cUser && $id && ($this->findModel($id)->cree_par != $cUser->id) ){
-            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-        }elseif (!$cUser || !$cUser->role0->attributes[$permission]) {
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
         }
     }
@@ -47,7 +45,7 @@ class PrivilegeController extends Controller
      */
     public function actionIndex()
     {
-        $this->checkAutorisation('priv_gerer');
+        $this->checkAutorisation('site_gerer');
         
         $searchModel = new PrivilegeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -65,7 +63,7 @@ class PrivilegeController extends Controller
      */
     public function actionView($id)
     {
-        $this->checkAutorisation('priv_gerer');
+        $this->checkAutorisation('site_gerer');
         
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -79,7 +77,7 @@ class PrivilegeController extends Controller
      */
     public function actionCreate()
     {
-        $this->checkAutorisation('priv_gerer');
+        $this->checkAutorisation('site_gerer');
         
         $model = new Privilege();
 
@@ -103,7 +101,7 @@ class PrivilegeController extends Controller
      */
     public function actionUpdate($id)
     {
-        $this->checkAutorisation('priv_gerer');
+        $this->checkAutorisation('site_gerer');
         
         $model = $this->findModel($id);
 
@@ -124,7 +122,7 @@ class PrivilegeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->checkAutorisation('priv_gerer');
+        $this->checkAutorisation('site_gerer');
         
         $this->findModel($id)->delete();
 

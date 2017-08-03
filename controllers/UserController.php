@@ -40,14 +40,11 @@ class UserController extends Controller {
     
     public function checkAutorisation($permission, $id=null){
         $cUser = Yii::$app->user->identity;
-        if ($cUser && $cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+        if ($cUser && ($cUser->role0->nom == "client" || $cUser->role0->type == "client")) {
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
         }
         if ($id && $this->findModel($id)->role0->nom == "superadmin") {
-            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-        }
-        if ($cUser && $id && ($this->findModel($id)->cree_par != $cUser->id) ){
-            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));  
         }elseif (!$cUser || !$cUser->role0->attributes[$permission]) {
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
         }
@@ -76,7 +73,7 @@ class UserController extends Controller {
         
         $this->checkAutorisation('user_gerer');
         $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'admin');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index_admin', [
                     'searchModel' => $searchModel,
@@ -96,7 +93,7 @@ class UserController extends Controller {
         //$team = User::getTeamOf($cUser->id);
         
         $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'client', $cUser->superieur0->id );
+        $dataProvider = $searchModel->cSearch(Yii::$app->request->queryParams, $cUser->id);
 
         return $this->render('c_index', [
                     'searchModel' => $searchModel,
@@ -112,13 +109,29 @@ class UserController extends Controller {
     public function actionView($id) {
         $this->checkAutorisation('user_gerer');
         $model = $this->findModel($id);
+        
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
         if ($model->role0->nom == 'client') {
+            $dataProvider = $searchModel->cSearch(Yii::$app->request->queryParams, $id);
             return $this->render('view', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }elseif ($model->role0->type == 'client') {
+            $dataProvider = $searchModel->cSearch(Yii::$app->request->queryParams, $id);
+            return $this->render('view_emp', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }else {
             return $this->render('view_admin', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }   
     }
@@ -127,6 +140,9 @@ class UserController extends Controller {
         $this->checkClientAutorisation('user_gerer');
         $this->layout = "layout_client";
         $model = $this->findModel($id);
+        if ($model->role0->type == "admin") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
         $model->logo = $model->superieur0->logo;
         return $this->render('c_view', [
             'model' => $model,
@@ -167,6 +183,8 @@ class UserController extends Controller {
                 $abonnement->etat = 'p';
                 
                 $db = Yii::$app->db; $transaction = $db->beginTransaction();
+                //var_dump($abonnement);
+                //Yii::$app->end();
                 
                 if (! $model->save()) {
                     throw new Exception("Cannot save the User \n". implode(", ", array_values($model->errors)[0]) );
@@ -291,6 +309,9 @@ class UserController extends Controller {
         $this->layout = "layout_client";
         
         $model = $this->findModel($id);
+        if ($model->role0->type == "admin") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
         $model->role_type = $model->role0->type;
 
         $model->imagePhoto = UploadedFile::getInstance($model, 'photo');
@@ -328,7 +349,14 @@ class UserController extends Controller {
     public function actionDelete($id) {
         $this->checkAutorisation('user_gerer', $id);
         
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ($model->role0->type == "admin") {
+            $chemin = "/uploads/".md5($model->mail);
+            \yii\helpers\FileHelper::removeDirectory($chemin);
+            $model->delete();
+        }
+        
+        
 
         return $this->redirect(['index']);
     }

@@ -83,6 +83,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['imageLogo'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             //[['abonnement'], 'exist', 'skipOnError' => true, 'targetClass' => Abonnement::className(), 'targetAttribute' => ['client' => 'id']],
             [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
+            [['superieur'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['superieur' => 'id']],
             [['mail'], 'validateMail'],
         ];
     }
@@ -228,6 +229,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getSuperieur0()
     {
+        //return $this->hasOne(User::className(), ['id' => 'superieur']);
         if ($this->superieur) {
             return $this->hasOne(User::className(), ['id' => 'superieur']);
         }else {
@@ -271,9 +273,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $liste = [];
         if ($id) {
             $client = User::findOne(['id' => $id])->superieur0;
+            
             array_push($liste, $client);
-            array_combine($liste, User::findAll(["superieur" => $client->id]) );
-            //array_($liste, $client);
+            
+            //array_merge($liste, User::findAll(["superieur" => $client->id, ['not', ["id"=>Yii::$app->user->id]]]) );
+            //$liste = User::findAll(["superieur" => $client->id]);
+            $liste = \yii\helpers\ArrayHelper::merge($liste, User::findAll(["superieur" => $client->id]));
+            //var_dump($liste);
+            //Yii::$app->end();
         }
         return $liste;
     }

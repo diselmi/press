@@ -49,6 +49,7 @@ class AbonnementController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkAutorisation('user_gerer');
         $searchModel = new AbonnementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -65,6 +66,7 @@ class AbonnementController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('user_gerer');
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -78,6 +80,7 @@ class AbonnementController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkAutorisation('user_gerer');
         $model = $this->findModel($id);
         
         //$liste_admins = User::find()->onlyAdmins()->all();
@@ -146,6 +149,23 @@ class AbonnementController extends Controller
         $liste_admins = ArrayHelper::map($liste_admins, 'id', 'mail');
         
         return $liste_admins;
+    }
+    
+    
+    public function actionRelancer($id)
+    {
+        $model = Abonnement::findOne(['id'=>$id]);
+        if ($model) {
+            $date = strtotime($model->date_fin);
+            $date = date('Y-m-d', strtotime("+30 days", $date));
+            //$date = date_add($date, date_interval_create_from_date_string("P2D"));
+            $model->date_fin = $date;
+            //var_dump($model->date_fin);
+            //Yii::$app->end();
+            if ($model->save()) {
+                return $this->actionIndex();
+            }
+        }
     }
     
     

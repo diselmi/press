@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
     </p>
 
+    <?php if( $model->type == "admin" ) { ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -40,12 +41,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'nom',
             'type',
             'user_gerer:boolean',
-            'role_gerer:boolean',
+            'prestataire_gerer:boolean',
+            'site_gerer:boolean',
+            'contact_gerer:boolean',
         ],
     ]) ?>
+    <?php }else { ?>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'nom',
+            'type',
+            'user_gerer:boolean',
+            'prestataire_gerer:boolean',
+            'evenement_gerer:boolean',
+        ],
+    ]) ?>
+    <?php } ?>
     
     
-    <h2> <?= Yii::t('app', 'assigned users') ?>: </h2>
+    <h2> <?= ucfirst(Yii::t('app', 'utilisataurs')) ?>: </h2>
     
     <?php
         $usersProvider = new ArrayDataProvider([

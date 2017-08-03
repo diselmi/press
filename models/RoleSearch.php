@@ -12,6 +12,7 @@ use app\models\Role;
  */
 class RoleSearch extends Role
 {
+    
     /**
      * @inheritdoc
      */
@@ -19,8 +20,7 @@ class RoleSearch extends Role
     {
         return [
             [['id'], 'integer'],
-            [['nom'], 'safe'],
-            [['type'], 'safe'],
+            [['nom', 'type'], 'safe'],
         ];
     }
 
@@ -66,7 +66,7 @@ class RoleSearch extends Role
 
         $query->andFilterWhere(['like', 'nom', $this->nom]);
         $query->andFilterWhere(['like', 'type', $this->type]);
-
+        
         return $dataProvider;
     }
 }

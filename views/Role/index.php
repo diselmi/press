@@ -42,10 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}{update}{delete}{affectation}',
                 'visibleButtons' => [
                     'update' => function ($model_u, $key, $index) {
-                        return $model_u->nom == "superadmin" ? false : true;
+                        if ($model_u->nom == "superadmin" || $model_u->nom == "client") {
+                            return false;
+                        }
+                        return true;
                     },
                     'delete' => function ($model_u, $key, $index) {
-                        return $model_u->nom == "superadmin" ? false : true;
+                        if ($model_u->nom == "superadmin" || $model_u->nom == "client") {
+                            return false;
+                        }
+                        return true;
                     },
                     'affectation' => function ($model_u, $key, $index) {
                         return $model_u->nom == "superadmin" ? false : true;

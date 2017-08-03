@@ -8,9 +8,12 @@ use Yii;
  * This is the model class for table "role".
  *
  * @property integer $id
+ * @property string $type
  * @property string $nom
  * @property boolean $user_gerer
- * @property boolean $role_gerer
+ * @property boolean $prestataire_gerer
+ * @property boolean $site_gerer
+ * @property boolean $contact_gerer
  *
  * @property User[] $users
  */
@@ -30,9 +33,10 @@ class Role extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nom'], 'required'],
+            [['nom', 'type'], 'required'],
             [['nom'], 'string', 'max' => 32],
-            [['user_gerer', 'role_gerer'], 'boolean'],
+            [['type'], 'string', 'max' => 16],
+            [['user_gerer', 'prestataire_gerer', 'site_gerer', 'contact_gerer', 'evenement_gerer'], 'boolean'],
         ];
     }
 
@@ -43,9 +47,13 @@ class Role extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'type' => Yii::t('app', 'Type'),
             'nom' => Yii::t('app', 'Nom'),
-            'user_gerer' => Yii::t('app', 'Gerer users'),
-            'role_gerer' => Yii::t('app', 'Gerer roles'),
+            'user_gerer' => Yii::t('app', 'Gerer les utilisateurs'),
+            'prestataire_gerer' => Yii::t('app', 'Gerer prestataires'),
+            'site_gerer' => Yii::t('app', 'Gerer le site'),
+            'contact_gerer' => Yii::t('app', 'Gerer les emails de contact'),
+            'evenement_gerer' => Yii::t('app', 'Gerer les evenements'),
         ];
     }
 

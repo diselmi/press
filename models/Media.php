@@ -22,7 +22,9 @@ use Yii;
  * @property string $twitter
  * @property string $date_creation
  * @property integer $pr_value
+ * @property integer $cree_par
  * 
+ * @property User $creePar
  * @property JournalisteMedia[] $journalisteMedia
  * @property Journaliste[] $journalistes
  */
@@ -62,6 +64,8 @@ class Media extends \yii\db\ActiveRecord
             ['numtel', 'validatePhone'],
             ['pr_value', 'integer'],
             [['fichier_logo'], 'image', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
+            [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
+            
         ];
     }
     
@@ -100,9 +104,17 @@ class Media extends \yii\db\ActiveRecord
             'facebook' => Yii::t('app', 'Facebook'),
             'twitter' => Yii::t('app', 'Twitter'),
             'date_creation' => Yii::t('app', 'Date Creation'),
+            'cree_par' => Yii::t('app', 'Cree Par'),
         ];
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreePar()
+    {
+        return $this->hasOne(User::className(), ['id' => 'cree_par']);
+    }
     
     /**
      * @return \yii\db\ActiveQuery

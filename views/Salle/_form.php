@@ -43,8 +43,13 @@ use kartik\widgets\FileInput;
     
     <?= $form->field($model, 'numtel')->textInput(['maxlength' => true]) ?>
     
-    <?php $radioItems = ["0"=> ucfirst(Yii::t("app", "no")), "1"=> ucfirst(Yii::t("app", "yes")) ]; ?>
-    <?= $form->field($model, 'est_premium')->radioList($radioItems) ?>
+    <?php
+    $cUser = Yii::$app->user->identity;
+    if ($cUser->role0->nom != "client" && $cUser->role0->type != "client" ) {
+        $radioItems = ["0"=> ucfirst(Yii::t("app", "no")), "1"=> ucfirst(Yii::t("app", "yes")) ];
+        echo $form->field($model, 'est_premium')->radioList($radioItems);
+    }
+    ?>
     
     <?= "<label>Gallery photos</label>" ?>
     <?= FileInput::widget([

@@ -62,6 +62,14 @@ use kartik\datecontrol\DateControl;
                 ]
 
             ]); ?>
+    
+    <?php
+        $cUser = Yii::$app->user->identity;
+        if ($cUser->role0->nom == "client" || $cUser->role0->type == "client" ) {
+            $radioItems = ["0"=> ucfirst(Yii::t("app", "no")), "1"=> ucfirst(Yii::t("app", "yes")) ];
+            echo $form->field($model, 'pr_value')->textInput(['maxlength' => true]);
+        }
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

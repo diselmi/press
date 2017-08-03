@@ -73,7 +73,21 @@ $this->params['breadcrumbs'][] = $model->id;
         ],
     ]) ?>
     
-    <h3> <?= Yii::t('app', 'Vis a vis') ?> </h3>
+    <h3> <?= ucfirst(Yii::t("app", "permissions")) ?> </h3>
+    <?= DetailView::widget([
+        'model' => $model->role0,
+        'attributes' => [
+            'user_gerer:boolean',
+            'prestataire_gerer:boolean',
+            'evenement_gerer:boolean',
+        ],
+    ]) ?>
+    
+    <hr>
+    <h3> <?= ucfirst(Yii::t('app', 'superieur')) ?> </h3>
+    <hr>
+    
+    <h3> <?= ucfirst(Yii::t('app', 'vis a vis')) ?> </h3>
     <?= DetailView::widget([
         'model' => $model->superieur0->abonnement0->vis_a_vis0,
         'attributes' => [
@@ -98,7 +112,7 @@ $this->params['breadcrumbs'][] = $model->id;
         ],
     ]) ?>
     
-    <h3> <?= Yii::t('app', 'Abonnement') ?> </h3>
+    <h3> <?= ucfirst(Yii::t('app', 'abonnement')) ?> </h3>
     <?= DetailView::widget([
         'model' => $model->superieur0->abonnement0,
         'attributes' => [

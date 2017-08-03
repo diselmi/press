@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Create User'), ['c-create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(['id'=>'pjax-user-gridview']); ?>
+<?php Pjax::begin(['id'=>'pjax-user-gridview-client']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -53,14 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["c-view", "id"=>$key],[
+                        if ($model->role0->type != "admin") {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["c-view", "id"=>$key],[
                                 'title' => Yii::t('yii', 'view')
-                            ]); 
+                            ]);
+                        }
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ["c-update", "id"=>$key],[
-                            'title' => Yii::t('yii', 'update')
-                        ]);
+                        if ($model->role0->type != "admin") {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ["c-update", "id"=>$key],[
+                                'title' => Yii::t('yii', 'update')
+                            ]);
+                        }
                     },
                     'delete' => function ($url, $model, $key) {
                         if ($model->role0->type != "admin") {

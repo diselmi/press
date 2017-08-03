@@ -20,9 +20,13 @@ use yii\helpers\Url;
 
 use app\models\Contact;
 
+use dosamigos\qrcode\formats\MailTo;
+use dosamigos\qrcode\QrCode;
+
 class SiteController extends Controller
 {
     //public $layout = "main.php";
+    
     /**
      * @inheritdoc
      */
@@ -190,6 +194,9 @@ class SiteController extends Controller
      */
     public function actionDashboard()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(Url::toRoute("/login"));
+        }
         $user = Yii::$app->user->identity;
         if ($user->role0->nom == "client" || $user->role0->type == "client") {
             $this->layout = "layout_client";
@@ -200,6 +207,76 @@ class SiteController extends Controller
         }else {
             return $this->goHome();
         }
+    }
+    
+    /**
+     * shares a content.
+     * @param integer $lien
+     * @param array $emails
+     * @return string
+     */
+    public function actionShare()
+    {
+        $this->layout = "layout_client";
+        
+        $titre = "";
+        $image = "";
+        $lien = "";
+        $post = Yii::$app->request->post();
+        if (isset($post["emails"])) {
+            $emails = $post["emails"];
+            $objet = isset($post["objet"]) ? $post["objet"] : "";
+            $contenu = isset($post["contenu"]) ? $post["contenu"] : "";
+            if ($this->envoyerEmails($emails, $objet, $contenu)) {
+                Yii::$app->session->setFlash("success", Yii::t("app", "Votre email a été envoyé."));
+            }else {
+                Yii::$app->session->setFlash("error", Yii::t("app", "Une erreur s'est produite. Votre email n'a pas été envoyé."));
+            }
+            
+            //var_dump($post);
+            //Yii::$app->end();
+            
+        }
+        if (isset($post["lien"]) && $lien = $post["lien"]) {
+            Yii::$app->session->set("tmp_lien", $lien);
+        }
+        if (isset($post["titre"]) ) {
+            $titre = $post["titre"];
+        }
+        if (isset($post["image"]) ) {
+            $image = $post["image"];
+        }
+        
+        return $this->render('share', [
+            'lien'          => $lien,
+            'titre'         => $titre,
+            'image'         => $image,
+        ]);
+    }
+    
+    private function envoyerEmails($emails, $obj, $msg)
+    {
+        foreach ($emails as $email) {
+            try {
+                Yii::$app->mailer->compose()
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo($email)
+                //->setReplyTo([$this->email => $this->prenom." ".$this->nom." (".$this->rc.")"])
+                ->setSubject($obj)
+                ->setTextBody($msg)
+                ;//->send();
+            } catch (\Exception $ex) {
+                return false;
+            }
+            
+            //var_dump(Yii::$app->mailer);
+            //Yii::$app->end();
+        }
+        return false;
+    }
+    
+    public function actionQrcode() {
+        return QrCode::png(Yii::$app->session->get('tmp_lien') );
     }
     
     

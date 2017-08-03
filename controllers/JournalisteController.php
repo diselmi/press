@@ -13,6 +13,9 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\models\Media;
 
+use yii\helpers\ArrayHelper;
+use app\models\User;
+
 /**
  * JournalisteController implements the CRUD actions for Journaliste model.
  */
@@ -33,6 +36,40 @@ class JournalisteController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+        if ($cUser->role0->nom == "client" || $cUser->role0->type == "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }  
+    }
+    
+    public function checkClientAutorisation($permission, $model = null)
+    {
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if ($cUser->role0->nom != "client" && $cUser->role0->type != "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if (!$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        
+        if ($model) {
+            $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            if (!in_array($model->cree_par, $liste) ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+            }
+        }
+        
+        $this->layout = "layout_client";
+        
+    }
 
     /**
      * Lists all Journaliste models.
@@ -40,6 +77,12 @@ class JournalisteController extends Controller
      */
     public function actionIndex()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
         $searchModel = new JournalisteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -56,7 +99,13 @@ class JournalisteController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view_admin', [
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -68,6 +117,12 @@ class JournalisteController extends Controller
      */
     public function actionCreate()
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
         $model = new Journaliste();
         $liste_j_m = array();
         
@@ -75,26 +130,32 @@ class JournalisteController extends Controller
             //var_dump(Yii::$app->request->post());
             //Yii::$app->end();
             $model->fichier_photo = UploadedFile::getInstance($model, 'fichier_photo');
-            $model['theme'] = Journaliste::$themes[$model['theme']];
+            //$model['theme'] = Journaliste::$themes[$model['theme']];
+            
+            $model->cree_par = Yii::$app->user->id;
             
             $db = Yii::$app->db; $transaction = $db->beginTransaction();
-            if ($model->save() && $model->upload()) { 
-                foreach (Yii::$app->request->post('journaliste_media') as $m){
-                    $media = new JournalisteMedia();
-                    $media['journaliste'] = $model->id;
-                    $media['media'] = $m['id_media'];
-                    $media['tv'] = isset($m['tv']) ? 1 : 0;
-                    $media['radio'] = isset($m['radio']) ? 1 : 0;
-                    $media['j_papier'] = isset($m['j_papier']) ? 1 : 0;
-                    $media['j_electronique'] = isset($m['j_electronique']) ? 1 : 0;
-                    
-                    if (!$media->save()) {
-                        $transaction->rollBack();
+            if ($model->save() && $model->upload()) {
+                if (Yii::$app->request->post('journaliste_media')) {
+                    foreach (Yii::$app->request->post('journaliste_media') as $m){
+                        $media = new JournalisteMedia();
+                        $media['journaliste'] = $model->id;
+                        $media['media'] = $m['id_media'];
+                        $media['tv'] = isset($m['tv']) ? 1 : 0;
+                        $media['radio'] = isset($m['radio']) ? 1 : 0;
+                        $media['j_papier'] = isset($m['j_papier']) ? 1 : 0;
+                        $media['j_electronique'] = isset($m['j_electronique']) ? 1 : 0;
+
+
+
+                        if (!$media->save()) {
+                            $transaction->rollBack();
+                        }
                     }
                 }
                 
                 $transaction->commit();
-                return $this->redirect(['view_admin', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
         return $this->render('create', [
@@ -111,13 +172,19 @@ class JournalisteController extends Controller
      */
     public function actionUpdate($id)
     {
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
 
         if ($model->load(Yii::$app->request->post()) ) {
             //var_dump(Yii::$app->request->post());
             //Yii::$app->end();
             $model->fichier_photo = UploadedFile::getInstance($model, 'fichier_photo');
-            $model['theme'] = Journaliste::$themes[$model['theme']];
+            //$model['theme'] = Journaliste::$themes[$model['theme']];
             if ($model->save() && $model->upload()) {
                 JournalisteMedia::deleteAll([ "journaliste"=>$id ]);
                 $db = Yii::$app->db; $transaction = $db->beginTransaction();
@@ -155,7 +222,14 @@ class JournalisteController extends Controller
      */
     public function actionDelete($id)
     {
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
+        
         JournalisteMedia::deleteAll([ "journaliste"=>$id ]);
         $model->delete();
         
@@ -182,6 +256,12 @@ class JournalisteController extends Controller
     
     public function actionMedias($id)
     {
+
+        $model = $this->findModel($id);
+        if (Yii::$app->user->isGuest) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        
         $models = JournalisteMedia::findAll([ "journaliste"=>$id ]);
         
         $response = $models;
@@ -192,6 +272,9 @@ class JournalisteController extends Controller
     
     public function actionMediaSubform()
     {
+        if (Yii::$app->user->isGuest) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
         $models = Media::find()->all();
         
         $response = $models;

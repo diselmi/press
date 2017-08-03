@@ -18,7 +18,7 @@ class JournalisteSearch extends Journaliste
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'cree_par'], 'integer'],
             [['nom', 'mail', 'numtel', 'photo', 'siteweb', 'facebook', 'twitter'], 'safe'],
         ];
     }

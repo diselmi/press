@@ -77,13 +77,19 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         ),
         'd' => 
         array (
+            'dosamigos\\qrcode\\' => 17,
             'dosamigos\\gallery\\' => 18,
+            'dosamigos\\ckeditor\\' => 19,
             'dosamigos\\arrayquery\\' => 21,
             'dektrium\\user\\' => 14,
         ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
+        ),
+        'b' => 
+        array (
+            'bigpaulie\\social\\share\\' => 23,
         ),
         'W' => 
         array (
@@ -322,9 +328,17 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-affix',
         ),
+        'dosamigos\\qrcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-qrcode-helper/src',
+        ),
         'dosamigos\\gallery\\' => 
         array (
             0 => __DIR__ . '/..' . '/2amigos/yii2-gallery-widget/src',
+        ),
+        'dosamigos\\ckeditor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-ckeditor-widget/src',
         ),
         'dosamigos\\arrayquery\\' => 
         array (
@@ -337,6 +351,10 @@ class ComposerStaticInite26f36b623cc0512c1141179a5a7f5ba
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'bigpaulie\\social\\share\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bigpaulie/yii2-social-share/src',
         ),
         'Webmozart\\Assert\\' => 
         array (

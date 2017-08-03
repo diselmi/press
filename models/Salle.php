@@ -53,7 +53,7 @@ class Salle extends \yii\db\ActiveRecord
             [['capacite', 'cree_par'], 'integer'],
             [['nom', 'vis_a_vis'], 'string', 'max' => 64],
             [['numtel'], 'string', 'max' => 32],
-            [['connectique', 'gouvernerat'], 'string', 'max' => 12],
+            [['connectique', 'gouvernerat'], 'string', 'max' => 64],
             [['adresse'], 'string', 'max' => 256],
             [['est_premium'], 'boolean'],
             [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
@@ -138,7 +138,7 @@ class Salle extends \yii\db\ActiveRecord
         if ($this->fichier_image) {
             $chemin_upload = $chemin."image.".$this->fichier_image->extension;
             $this->fichier_image->saveAs($chemin_upload);
-            $this->image = "/image.".$this->fichier_image->extension;
+            $this->image = "/.".$chemin_upload;
 
             $this->offsetUnset('fichier_image');
         }

@@ -43,6 +43,10 @@ use kartik\file\FileInput;
         <?= $form->field($model, 'pass')->textInput() ?>
 
     <?php } ?>
+    
+    <?= $form->field($model, 'couleur_interface')->widget(ColorInput::classname(), [
+        'options' => ['placeholder' => 'Select color ...'],
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn btn-primary']) ?>

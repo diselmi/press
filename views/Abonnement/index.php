@@ -51,12 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key], ["title" => Yii::t("app", "View") ]);
 
                     },
-                    'relance' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-refresh"></span>', ["view", "id"=>$key], ["title" => Yii::t("app", "Relancer") ]);
+                    'relancer' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span>', ["relancer", "id"=>$key], ["title" => Yii::t("app", "Relancer") ]);
                         
                     },
                 ],
-                'template' => '{view}{update}{relance}',
+                'template' => '{view}{update}{relancer}',
             
             ],
         ],

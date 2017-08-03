@@ -5524,5 +5524,289 @@
             "yii 2",
             "yii2"
         ]
+    },
+    {
+        "name": "ckeditor/ckeditor",
+        "version": "4.7.1",
+        "version_normalized": "4.7.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ckeditor/ckeditor-releases.git",
+            "reference": "d62153e131ad4187700342fc044cf069c2fb5d8a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/d62153e131ad4187700342fc044cf069c2fb5d8a",
+            "reference": "d62153e131ad4187700342fc044cf069c2fb5d8a",
+            "shasum": ""
+        },
+        "time": "2017-06-28T14:36:40+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+",
+            "LGPL-2.1+",
+            "MPL-1.1+"
+        ],
+        "authors": [
+            {
+                "name": "CKSource",
+                "homepage": "http://cksource.com"
+            }
+        ],
+        "description": "JavaScript WYSIWYG web text editor.",
+        "homepage": "http://ckeditor.com",
+        "keywords": [
+            "CKEditor",
+            "editor",
+            "fckeditor",
+            "html",
+            "javascript",
+            "richtext",
+            "text",
+            "wysiwyg"
+        ]
+    },
+    {
+        "name": "2amigos/yii2-ckeditor-widget",
+        "version": "2.1.0",
+        "version_normalized": "2.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/2amigos/yii2-ckeditor-widget.git",
+            "reference": "2ba96ec670d0745b5616d2aa94d720cc7288bc08"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/2amigos/yii2-ckeditor-widget/zipball/2ba96ec670d0745b5616d2aa94d720cc7288bc08",
+            "reference": "2ba96ec670d0745b5616d2aa94d720cc7288bc08",
+            "shasum": ""
+        },
+        "require": {
+            "ckeditor/ckeditor": "~4.7.0+full",
+            "yiisoft/yii2": "^2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*"
+        },
+        "time": "2017-06-12T18:51:26+00:00",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "dosamigos\\ckeditor\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "2amigOS! Consulting Group",
+                "email": "hola@2amigos.us",
+                "homepage": "http://2amigos.us",
+                "role": "Developer"
+            }
+        ],
+        "description": "CKEditor widget for Yii2.",
+        "homepage": "http://yiiwheels.com/extension/ckeditor-widget",
+        "keywords": [
+            "2amigos",
+            "CKEditor",
+            "extension",
+            "widget",
+            "yii",
+            "yii 2",
+            "yii2"
+        ]
+    },
+    {
+        "name": "bower-asset/font-awesome",
+        "version": "v4.7.0",
+        "version_normalized": "4.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/FortAwesome/Font-Awesome.git",
+            "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
+            "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
+            "shasum": ""
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "less/font-awesome.less",
+                "scss/font-awesome.scss"
+            ],
+            "bower-asset-ignore": [
+                "*/.*",
+                "*.json",
+                "src",
+                "*.yml",
+                "Gemfile",
+                "Gemfile.lock",
+                "*.md"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "OFL-1.1",
+            "MIT",
+            "CC-BY-3.0"
+        ],
+        "description": "Font Awesome"
+    },
+    {
+        "name": "bower-asset/bootstrap-social",
+        "version": "4.12.0",
+        "version_normalized": "4.12.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/lipis/bootstrap-social.git",
+            "reference": "94cfded5ede73b5e60dcdafbb7a455a6246ab337"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/lipis/bootstrap-social/zipball/94cfded5ede73b5e60dcdafbb7a455a6246ab337",
+            "reference": "94cfded5ede73b5e60dcdafbb7a455a6246ab337",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/bootstrap": "~3",
+            "bower-asset/font-awesome": "~4.5"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "bootstrap-social.css",
+                "bootstrap-social.less",
+                "bootstrap-social.scss"
+            ],
+            "bower-asset-ignore": [
+                "assets",
+                "index.html",
+                "LICENCE"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ]
+    },
+    {
+        "name": "bigpaulie/yii2-social-share",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bigpaulie/yii2-social-share.git",
+            "reference": "81e253e45a70a7353a71c68ba744c130de79af66"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bigpaulie/yii2-social-share/zipball/81e253e45a70a7353a71c68ba744c130de79af66",
+            "reference": "81e253e45a70a7353a71c68ba744c130de79af66",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/bootstrap-social": "~4.0",
+            "php": ">= 5.4",
+            "yiisoft/yii2": "2.*"
+        },
+        "time": "2017-03-21T07:25:49+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "bigpaulie\\social\\share\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Paul P",
+                "email": "bigpaulie25ro@yahoo.com",
+                "homepage": "http://www.paul-resume.com"
+            }
+        ],
+        "description": "Yii2 Social Link Sharer Extension",
+        "keywords": [
+            "share",
+            "social",
+            "widget",
+            "yii2"
+        ]
+    },
+    {
+        "name": "2amigos/yii2-qrcode-helper",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/2amigos/yii2-qrcode-helper.git",
+            "reference": "b034402e98c19f914946cc868e0606e657458fc8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/2amigos/yii2-qrcode-helper/zipball/b034402e98c19f914946cc868e0606e657458fc8",
+            "reference": "b034402e98c19f914946cc868e0606e657458fc8",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*",
+            "scrutinizer/ocular": "~1.1"
+        },
+        "time": "2017-06-21T10:56:44+00:00",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "dosamigos\\qrcode\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "2amigOS! Consulting Group",
+                "email": "hola@2amigos.us",
+                "homepage": "http://2amigos.us",
+                "role": "Developer"
+            }
+        ],
+        "description": "Create QrCodes based on libqrencode C library.",
+        "homepage": "http://yiiwheels.com/extension/qrcode-helper",
+        "keywords": [
+            "2amigos",
+            "extension",
+            "helper",
+            "qrcode",
+            "yii",
+            "yii 2",
+            "yii2"
+        ]
     }
 ]

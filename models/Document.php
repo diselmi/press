@@ -136,7 +136,7 @@ class Document extends \yii\db\ActiveRecord
             $chemin_complet = $chemin.$this->fichier->baseName.".".$this->fichier->extension;
             $this->fichier->saveAs($chemin_complet);
             //$this->chemin = $chemin_complet;
-            $this->chemin = $this->fichier->baseName.".".$this->fichier->extension;
+            $this->chemin = $chemin_complet;
 
             /*$this->type = "document";
             if (str_pos($this->fichier->type, "image")) { $this->type = "image"; }

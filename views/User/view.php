@@ -4,6 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Inflector;
 
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
@@ -23,6 +26,7 @@ $this->params['breadcrumbs'][] = $model->id;
     <div class="profile_title_admin">
         <h1><?= ucfirst(Html::encode($this->title)) ?></h1>
         <p>
+            <?= Html::a(Yii::t('app', 'Chat'), ['chat/index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Switch'), ['switch', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -118,5 +122,50 @@ $this->params['breadcrumbs'][] = $model->id;
             'acces_journalistes:boolean'
         ],
     ]) ?>
+    
+    <h3> <?= Yii::t('app', 'Liste des employes') ?> </h3>
+    <?php Pjax::begin(['id'=>'pjax-user-gridview-2']); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'nom_role',
+                'label'     => Yii::t('app', 'role'),
+                'value'     => function($model){
+                                if ($model->role0->nom !="client") {
+                                    return $model->role0->nom ;
+                                }else {
+                                    return "-";
+                                }
+                            }
+            ],
+            'nom',
+            'prenom',
+            'mail',
+            // 'login',
+            // 'pass',
+            // 'lang',
+            // 'role',
+            // 'fonction',
+            // 'logo',
+            // 'adresse',
+            // 'couleur_interface',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'switch' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', ["view", "id"=>$key]);
+                        
+                    },
+                ],
+                'template' => '{view}{update}{delete}',
+            
+            ],
+        ],
+    ]); ?>
+<?php Pjax::end(); ?>
 
 </div>

@@ -7,12 +7,15 @@ use app\models\Salle;
 use app\models\SalleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\base\Exception;
 use yii\filters\VerbFilter;
 
 use app\models\Gallery;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+use yii\helpers\ArrayHelper;
+use app\models\User;
 
 /**
  * SalleController implements the CRUD actions for Salle model.
@@ -36,12 +39,35 @@ class SalleController extends Controller
     }
     
     public function checkAutorisation($permission, $id=null){
-        $cUser = Yii::$app->user->identity;
-        if ($cUser && $id && ($this->findModel($id)->cree_par != $cUser->id && $this->findModel($id)->cree_par != $cUser->superieur) ){
-            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
-        }elseif (!$cUser || !$cUser->role0->attributes[$permission]) {
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
             throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
         }
+        $this->layout = "layout_admin";
+    }
+    
+    public function checkClientAutorisation($permission, $model = null)
+    {
+        $cUser = Yii::$app->user->identity;
+        if (!$cUser) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if ($cUser->role0->nom != "client" && $cUser->role0->type != "client") {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        if (!$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+        }
+        
+        if ($model) {
+            $liste = ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            if (!in_array($model->cree_par, $liste) ) {
+                throw new ForbiddenHttpException(Yii::t('app', 'forbidden'));
+            }
+        }
+        
+        $this->layout = "layout_client";
+        
     }
 
     /**
@@ -50,7 +76,13 @@ class SalleController extends Controller
      */
     public function actionIndex()
     {
-        $this->checkAutorisation('salle_gerer');
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $searchModel = new SalleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -67,6 +99,13 @@ class SalleController extends Controller
      */
     public function actionView($id)
     {
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $model = $this->findModel($id);
         
         $ch_f = "/uploads/salles/".$model->dossier;
@@ -88,7 +127,13 @@ class SalleController extends Controller
      */
     public function actionCreate()
     {
-        $this->checkAutorisation('salle_gerer');
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $model = new Salle();
         
         $gallery_photos = new Gallery();
@@ -149,8 +194,16 @@ class SalleController extends Controller
      */
     public function actionUpdate($id)
     {
-        $this->checkAutorisation('salle_gerer', $id);
+        $cUser = Yii::$app->user->identity;
         $model = $this->findModel($id);
+        
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer', $model);
+        }
+        
+        
 
         if ($model->load(Yii::$app->request->post())) {
             
@@ -183,12 +236,15 @@ class SalleController extends Controller
             }else{
                 $model->gallery_photos = $gallery_photos->id;
                 $model->gallery_pdf = $gallery_pdf->id;
+                
                 if (! ($model->save() && $model->uploadImage())) {
                     $transaction->rollBack();
                     throw new Exception("cannot_save_salle \n". implode(", ", array_values($model->errors)[0]) );
                 }else {
                     $transaction->commit();
-                }  
+                }
+                //var_dump($model->connectique);
+                //Yii::$app->end();
             }
             
             return $this->redirect(['view', 'id' => $model->id]);
@@ -207,7 +263,13 @@ class SalleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->checkAutorisation('salle_gerer', $id);
+        $cUser = Yii::$app->user->identity;
+        if ($cUser && $cUser->role0->type != "client" && $cUser->role0->nom != "client" ) {
+            $this->checkAutorisation('prestataire_gerer');
+        }else {
+            $this->checkClientAutorisation('prestataire_gerer');
+        }
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

@@ -45,7 +45,11 @@ class SalleSearch extends Salle
         $query = Salle::find();
 
         // add conditions that should always apply here
-
+        $this->addClientConditions($query);
+        
+        //var_dump($query->all());
+        //Yii::$app->end();
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -77,4 +81,22 @@ class SalleSearch extends Salle
 
         return $dataProvider;
     }
+    
+    public function addClientConditions($query)
+    {
+        if (!Yii::$app->user->isGuest && $cUser = Yii::$app->user->identity ) {
+            $premium = 0;
+            if ($abonnement = Abonnement::findOne(['client'=>$cUser->superieur0->id])) {
+                $premium = $abonnement->acces_salles? [0,1] : 0;
+            }
+            $liste_employes = \yii\helpers\ArrayHelper::getColumn(User::getTeamOf($cUser->id), "id");
+            $liste_admins = \yii\helpers\ArrayHelper::getColumn(User::find()->adminsNoClients()->all(), "id");
+            $query->andWhere('false');
+            $query->orWhere(['cree_par'=>$liste_employes]);
+            $query->orWhere([ 'and' ,  ['est_premium'=>$premium]  ,  ['cree_par'=>$liste_admins]  ]);
+        }
+        
+    }
+    
+    
 }

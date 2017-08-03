@@ -32,6 +32,13 @@ class NouveauteController extends Controller
             ],
         ];
     }
+    
+    public function checkAutorisation($permission){
+        $cUser = Yii::$app->user->identity; 
+        if (!$cUser || !$cUser->role0->attributes[$permission]) {
+            throw new ForbiddenHttpException(Yii::t('app', 'forbidden')); 
+        }
+    }
 
     /**
      * Lists all Nouveaute models.
@@ -39,6 +46,7 @@ class NouveauteController extends Controller
      */
     public function actionIndex()
     {
+        $this->checkAutorisation('site_gerer');
         $searchModel = new NouveauteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -55,6 +63,7 @@ class NouveauteController extends Controller
      */
     public function actionView($id)
     {
+        $this->checkAutorisation('site_gerer');
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,6 +76,7 @@ class NouveauteController extends Controller
      */
     public function actionCreate()
     {
+        $this->checkAutorisation('site_gerer');
         $model = new Nouveaute();
         
         $model->fichier_image = UploadedFile::getInstance($model, 'image');
@@ -98,6 +108,7 @@ class NouveauteController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->checkAutorisation('site_gerer');
         $model = $this->findModel($id);
         
         $model->fichier_image = UploadedFile::getInstance($model, 'image');
@@ -124,6 +135,7 @@ class NouveauteController extends Controller
      */
     public function actionDelete($id)
     {
+        $this->checkAutorisation('site_gerer');
         $model = $this->findModel($id);
         if ($model && file_exists("./".$model->image)) {
             unlink("./".$model->image);

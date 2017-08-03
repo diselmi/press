@@ -23,7 +23,9 @@ use yii\helpers\FileHelper;
  * @property string $facebook
  * @property string $twitter
  * @property string $dossier
- *
+ * @property integer $cree_par
+ * 
+ * @property User $creePar
  * @property Gallery $galleryPdf
  * @property Gallery $galleryPhotos
  */
@@ -59,6 +61,8 @@ class Fournisseur extends \yii\db\ActiveRecord
             [['gallery_pdf'], 'exist', 'skipOnError' => true, 'targetClass' => Gallery::className(), 'targetAttribute' => ['gallery_pdf' => 'id']],
             [['gallery_photos'], 'exist', 'skipOnError' => true, 'targetClass' => Gallery::className(), 'targetAttribute' => ['gallery_photos' => 'id']],
             [['numtel'], 'validatePhone'],
+            [['cree_par'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['cree_par' => 'id']],
+            
         ];
     }
     
@@ -86,9 +90,18 @@ class Fournisseur extends \yii\db\ActiveRecord
             'siteweb' => Yii::t('app', 'Siteweb'),
             'facebook' => Yii::t('app', 'Facebook'),
             'twitter' => Yii::t('app', 'Twitter'),
+            'cree_par' => Yii::t('app', 'Cree Par'),
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreePar()
+    {
+        return $this->hasOne(User::className(), ['id' => 'cree_par']);
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -51,7 +51,7 @@ class RoleController extends Controller
      */
     public function actionIndex()
     {
-        $this->checkAutorisation('role_gerer');
+        $this->checkAutorisation('user_gerer');
         $searchModel = new RoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -68,7 +68,7 @@ class RoleController extends Controller
      */
     public function actionView($id)
     {
-        $this->checkAutorisation('role_gerer');
+        $this->checkAutorisation('user_gerer');
         
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -82,7 +82,7 @@ class RoleController extends Controller
      */
     public function actionCreate()
     {
-        $this->checkAutorisation('role_gerer');
+        $this->checkAutorisation('user_gerer');
         $model = new Role();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -110,20 +110,23 @@ class RoleController extends Controller
      */
     public function actionUpdate($id)
     {
-        $this->checkAutorisation('role_gerer');
+        $this->checkAutorisation('user_gerer');
         $model = $this->findModel($id);
 
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //var_dump(Yii::$app->request->post());
+            //Yii::$app->end();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             
-            $query = User::find();
-            $users_array = ArrayHelper::map($query->asArray()->all(), 'id', 'mail');
-            return $this->render('update', [
-                'model' => $model,
-                'users_array' => $users_array,
-            ]);
         }
+        $query = User::find();
+        $users_array = ArrayHelper::map($query->asArray()->all(), 'id', 'mail');
+        return $this->render('update', [
+            'model' => $model,
+            'users_array' => $users_array,
+        ]);
     }
 
     /**
@@ -134,7 +137,7 @@ class RoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->checkAutorisation('role_gerer');
+        $this->checkAutorisation('user_gerer');
         //$this->findModel($id)->delete();
         $model = $this->findModel($id);
         if ($model) {
@@ -142,7 +145,7 @@ class RoleController extends Controller
                 $model->delete();
             }else {
                 //throw new NotFoundHttpException("Role has users");
-                Yii::$app->session->addFlash(500, "Role has users");
+                Yii::$app->session->addFlash(500, Yii::t("app", "Role has users") );
             }
         }
 
@@ -168,12 +171,17 @@ class RoleController extends Controller
     
     public function actionAffectation($id)
     {
+        $this->checkAutorisation('user_gerer');
         $model = $this->findModel($id);
 
         if ($model !== null) {
             $searchModel = new UserSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0,0,0,1);
 
+            if ($model->type == "admin") {
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0,1,0,0);
+            }
+            
             return $this->render('affecter', [
                 'model' => $model,
                 'searchModel' => $searchModel,
@@ -195,7 +203,7 @@ class RoleController extends Controller
             if ($user->save()) {
                 return $this->actionAffectation($id_role);
             }else {
-                var_dump($user);
+                //var_dump($user);
             }
             
         } else {
